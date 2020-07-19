@@ -15,8 +15,8 @@ class AddFavour: AppCompatActivity() {
         PlaceFavourRequest.setOnClickListener {
             startActivity(Intent(this,MainActivity::class.java))
         }
-        textView4.setOnClickListener {
-            startActivity(Intent(this,col))
-        }
+//        textView4.setOnClickListener {
+//            startActivity(Intent(this,col))
+//        }
     }
 }
