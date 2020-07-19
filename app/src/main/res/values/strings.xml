@@ -31,4 +31,5 @@
     <string name="item_category">Item Category</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="editTextTextMultiLine">Shoppers List\n1.Enter Item and Quantity\n2. Enter Item and Quantity</string>
 </resources>
