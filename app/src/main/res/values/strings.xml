@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">favour</string>
+    <string-array name="ItemCategory">
+        <item>Groceries</item>
+        <item>Vegetables</item>
+        <item>Personal Care</item>
+        <item>Stationary</item>
+        <item>Medicine</item>
+    </string-array>
+    <string-array name="TypeRequest">
+        <item>Shopping</item>
+        <item>Borrowing</item>
+    </string-array>
+    <string-array name="spinnerItems">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="generate_favour_request">Generate Favour Request</string>
+    <string name="urgent_request">Urgent Request</string>
+    <string name="size">Size</string>
+    <string name="optional_eg_nestle_britania">Optional</string>
+    <string name="quantity">Quantity</string>
+    <string name="item_addition">Item Addition</string>
+    <string name="item_type">Item Type</string>
+    <string name="example_shampoo_facewash">Example: Shampoo, Facewash</string>
+    <!--    <string name="quantity">Quantity</string>-->
+    <string name="place_favour_request">Place Favour Request</string>
+    <string name="add_new_item">+ Add New Item</string>
+    <string name="favour_type">Favour Type</string>
+    <string name="item_category">Item Category</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="editTextTextMultiLine">Shoppers List\n1.Enter Item and Quantity\n2. Enter Item and Quantity</string>
 </resources>
