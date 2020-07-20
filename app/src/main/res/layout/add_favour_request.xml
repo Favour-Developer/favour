@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".AddFavour"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,20 +25,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/MedicineButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:padding="6dp"
         android:text="Medicine"
-        app:layout_constraintEnd_toStartOf="@+id/textView10"
+        app:layout_constraintEnd_toStartOf="@+id/HardwareButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintStart_toEndOf="@+id/StationaryButton"
+        app:layout_constraintTop_toBottomOf="@+id/VegetablesButton" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/HardwareButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -47,11 +48,11 @@
         android:padding="6dp"
         android:text="Hardware"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/PersonalCareButton"
         tools:clickable="true" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/StationaryButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
@@ -61,7 +62,7 @@
         android:padding="6dp"
         android:text="Stationary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/GroceriesButton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/BackButtonToHome"
@@ -137,7 +138,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/GroceriesButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
@@ -157,23 +158,21 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/VegetablesButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="16dp"
-        android:background="@drawable/my_selector"
         android:clickable="true"
         android:gravity="center"
         android:text="Vegetables"
-        app:layout_constraintEnd_toStartOf="@+id/textView7"
+        app:layout_constraintEnd_toStartOf="@+id/PersonalCareButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/GroceriesButton"
         app:layout_constraintTop_toBottomOf="@+id/textView13"
         tools:padding="6dp" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/PersonalCareButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -202,7 +201,7 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/MedicineButton" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
@@ -250,18 +249,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
-        android:onClick="yes"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:checked="false" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="576dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
