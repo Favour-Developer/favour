@@ -19,6 +19,10 @@ class AddFavour: AppCompatActivity() {
         BackButtonToHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+        PlaceFavourRequest.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
         GroceriesButton.setOnClickListener {
             if (iscolor) {
                 GroceriesButton.setBackgroundColor(Color.parseColor("#377118"))

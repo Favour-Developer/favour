@@ -30,5 +30,5 @@
     <string name="favour_type">Favour Type</string>
     <string name="item_category">Item Category</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="editTextTextMultiLine">Shoppers List\n1.Enter Item and Quantity\n2. Enter Item and Quantity</string>
+    <string name="editTextTextMultiLine">1. Enter Item and Quantity\n2. Enter Item and Quantity</string>
 </resources>
