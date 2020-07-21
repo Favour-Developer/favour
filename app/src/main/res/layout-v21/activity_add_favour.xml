@@ -72,12 +72,16 @@
         android:id="@+id/BackButtonToHome"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:background="@android:color/transparent"
+        android:backgroundTint="#FFFFFF"
+        android:focusable="auto"
         android:src="@drawable/abc_vector_test"
         android:tint="#000000"
+        app:backgroundTint="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="26dp" />
+        app:maxImageSize="26dp"
+        app:pressedTranslationZ="0dp"
+        app:rippleColor="#000000" />
 
     <TextView
         android:id="@+id/textView3"
@@ -189,15 +193,17 @@
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="22dp"
-        android:background="@drawable/textbackground"
+        android:background="@null"
         android:gravity="start|top"
         android:hint="@string/editTextTextMultiLine"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -240,13 +246,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textOn="@string/yes"
-        android:textOff="@string/no"
-        android:checked="false"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        />
+        tools:checked="false" />
 
     <TextView
         android:id="@+id/textView4"
