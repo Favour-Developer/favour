@@ -23,9 +23,6 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        if(getSharedPreferences("Data",Context.MODE_PRIVATE).getBoolean("isLogged",false)){
-            startActivity(Intent(this, MainActivity::class.java))
-        }
 //        val progressDialog: ProgressBar? = null
         mAuth = FirebaseAuth.getInstance()
         //action on clicking login button
@@ -46,7 +43,7 @@ class Login : AppCompatActivity() {
                     ) { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
-                            val d = Log.d("Success", "signInWithEmail:success")
+                           Log.d("Success", "signInWithEmail:success")
                             Toast.makeText(
                                 this, "Authentication Success.",
                                 Toast.LENGTH_SHORT
@@ -57,7 +54,8 @@ class Login : AppCompatActivity() {
                                 putBoolean("isLogged", true)
                             }.apply()
 
-                                startActivity(Intent(this, MainActivity::class.java))
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
 
                         } else {
                             // If sign in fails, display a message to the user.

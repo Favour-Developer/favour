@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appTheme"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/splash_image" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="email"
+        android:drawableStart="@drawable/email"
+        android:linksClickable="true"
+        android:text="info@favour.com"
+        android:textColor="@color/black1"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="map"
+        android:linksClickable="true"
+        android:drawableLeft="@drawable/location"
+        android:text="IIT Roorkee"
+        android:textColor="@color/black1"
+        android:textSize="22sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="favour.in"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+</LinearLayout>

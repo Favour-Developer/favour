@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_rankings"
+            android:icon="@drawable/ranking_icon"
+            android:title="Community Rankings" />
+        <item
+            android:id="@+id/nav_fCompleted"
+            android:icon="@drawable/fcompleted"
+            android:title="Completed Favours" />
+        <item
+            android:id="@+id/nav_fPoints"
+            android:icon="@drawable/fpoints_icon"
+            android:title="Favour Points" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/key"
+            android:title="Logout" />
+    </group>
+</menu>
