@@ -24,6 +24,14 @@ class MainActivity : NavigationDrawer() {
 
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
+            val adapter = PagerAdapter(supportFragmentManager)
+            viewPager.adapter = adapter
+//        tabLayout.setupWithViewPager(viewPager)
+            viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    viewPager.currentItem = tab!!.position
+                }
         val adapter = PagerAdapter(supportFragmentManager)
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
