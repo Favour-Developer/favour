@@ -7,6 +7,7 @@ import android.graphics.Path
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_favour.*
 
@@ -19,6 +20,12 @@ class AddFavour: AppCompatActivity() {
         BackButtonToHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+        PlaceFavourRequest.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+//          switch1.setOnClickListener({_, })
+
+
         GroceriesButton.setOnClickListener {
             if (iscolor) {
                 GroceriesButton.setBackgroundColor(Color.parseColor("#377118"))
