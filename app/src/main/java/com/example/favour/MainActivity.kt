@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupPermissions()
         AddFavourRequest.setOnClickListener {
             startActivity(Intent(this, AddFavour::class.java))
         }
@@ -48,28 +47,5 @@ class MainActivity : AppCompatActivity() {
 
             })
         }
-// CAMERA SETUP
-// https://pranaybhalerao.wordpress.com/2018/02/11/run-time-permission-in-androidkotlin/
 
-    private val CAMERA_REQUEST_CODE=123;
-    private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-        if (permission!=PackageManager.PERMISSION_GRANTED){
-            makeRequest()
-        }
-    }
-    private fun makeRequest(){
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),CAMERA_REQUEST_CODE)
-    }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            CAMERA_REQUEST_CODE -> {
-                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
 }

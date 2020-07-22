@@ -1,33 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_width="match_parent" android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".AddFavour">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
     <include
         android:id="@+id/toolbarLayout"
         layout="@layout/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/PlaceFavourRequest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/curveborder"
-        android:gravity="center"
-
-        android:padding="12dp"
-        android:text="Place Favour request"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/MedicineButton"
@@ -75,14 +61,19 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/BackButtonToHome"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:background="@android:color/transparent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
         android:src="@drawable/abc_vector_test"
-        android:tint="#000000"
+        android:tint="@color/black"
+        app:backgroundTint="@android:color/transparent"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:hoveredFocusedTranslationZ="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarLayout"
-        app:maxImageSize="26dp" />
+        app:maxImageSize="26dp"
+        app:pressedTranslationZ="0dp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -122,7 +113,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="Generate Favour Request"
         android:textColor="#000"
         android:textSize="18sp"
@@ -152,7 +143,7 @@
         android:clickable="true"
         android:gravity="center"
         android:padding="2dp"
-        android:selectAllOnFocus="false"
+        android:selectAllOnFocus="true"
         android:text="Groceries"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -194,12 +185,13 @@
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="22dp"
-        android:background="@drawable/textbackground"
+        android:background="@drawable/border"
         android:gravity="start|top"
+        android:padding="8dp"
         android:hint="@string/editTextTextMultiLine"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
@@ -217,7 +209,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="22dp"
+
         android:text="OR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -248,12 +242,15 @@
         android:layout_marginTop="20dp"
         android:textOff="No"
         android:textOn="Yes"
-        android:checked="true"
+        android:textColorHighlight="@color/Green"
+        android:checked="false"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:showText="true"/>
-    <!--        android:thumb="@drawable/round_thumb"-->
-    <!--        android:track="@drawable/round_track"-->
+/>
+    <!--            android:showText="true"/>-->
+    <!--            android:thumb="@drawable/round_thumb"-->
+<!--            android:track="@drawable/round_track"-->
+<!--    />-->
     <TextView
         android:id="@+id/textView4"
         android:layout_width="0dp"
@@ -270,8 +267,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="22dp"
@@ -280,5 +277,39 @@
         app:layout_constraintTop_toTopOf="@+id/textView5"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/CrossButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="2dp"
+        android:clickable="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/transparent"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:hoveredFocusedTranslationZ="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:maxImageSize="80dp"
+        app:pressedTranslationZ="0dp"
+        app:srcCompat="@android:drawable/btn_dialog" />
 
+    <TextView
+        android:id="@+id/PlaceFavourRequest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="416dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/curveborder"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Place Favour request"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
