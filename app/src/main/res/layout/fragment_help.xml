@@ -17,7 +17,7 @@
         android:autoLink="email"
         android:drawableStart="@drawable/email"
         android:linksClickable="true"
-        android:text="info@favour.com"
+        android:text="@string/favour_mail"
         android:textColor="@color/black1"
         android:textSize="22sp" />
 
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:autoLink="map"
         android:linksClickable="true"
-        android:drawableLeft="@drawable/location"
+        android:drawableStart="@drawable/location"
         android:text="IIT Roorkee"
         android:textColor="@color/black1"
         android:textSize="22sp" />

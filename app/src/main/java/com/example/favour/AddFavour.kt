@@ -17,7 +17,7 @@ import org.w3c.dom.Text
 
 private const val REQUEST_CODE=42
 @Suppress("PLUGIN_WARNING")
-class AddFavour: AppCompatActivity() {
+class AddFavour: NavigationDrawer() {
     var iscolor = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
