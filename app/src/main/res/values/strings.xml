@@ -8,8 +8,8 @@
         <item>Medicine</item>
     </string-array>
     <string-array name="TypeRequest">
-        <item>Shopping</item>
-        <item>Borrowing</item>
+        <item>Shopping  ▼</item>
+        <item>Borrowing  ▼</item>
     </string-array>
     <string-array name="spinnerItems">
         <item>Small</item>

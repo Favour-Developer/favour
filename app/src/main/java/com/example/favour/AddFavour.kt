@@ -18,7 +18,6 @@ import org.w3c.dom.Text
 private const val REQUEST_CODE=42
 @Suppress("PLUGIN_WARNING")
 class AddFavour: NavigationDrawer() {
-    var iscolor = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_favour)
@@ -27,34 +26,22 @@ class AddFavour: NavigationDrawer() {
         }
         PlaceFavourRequest.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
-
         }
 
-        val sw = findViewById<Switch>(R.id.switch1)
-        sw?.setOnCheckedChangeListener { _, isChecked ->
-            val msg = if (isChecked){
-                "Yes"
-//                switch1.setBackgroundColor(Color.GREEN)
-            }
-            else {
-                "No "
-//                switch1.setBackgroundColor(Color.RED)
-            }
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-            sw.text = msg
-        }
-
-//        GroceriesButton.setOnClickListener {
-//            if (iscolor) {
-//                GroceriesButton.setBackgroundColor(Color.parseColor("#377118"))
-//                GroceriesButton.setTextColor(Color.WHITE)
-//            } else {
-//                GroceriesButton.setBackgroundColor(Color.parseColor("#FFF"))
-//                GroceriesButton.setTextColor(Color.BLACK)
+//        val sw = findViewById<Switch>(R.id.switch1)
+//        sw?.setOnCheckedChangeListener { _, isChecked ->
+//            val msg = if (isChecked){
+//                "Yes"
+////                switch1.setBackgroundColor(Color.GREEN)
 //            }
-//            iscolor = !iscolor
+//            else {
+//                "No "
+////                switch1.setBackgroundColor(Color.RED)
+//            }
+//            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+//            sw.text = msg
 //        }
-//
+
         OpenCamera.setOnClickListener {
             setupPermissions()
             val TakePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -70,7 +57,7 @@ class AddFavour: NavigationDrawer() {
             imageView.visibility = View.GONE
         }
         // CAMERA SETUP
-// https://pranaybhalerao.wordpress.com/2018/02/11/run-time-permission-in-androidkotlin/
+        // https://pranaybhalerao.wordpress.com/2018/02/11/run-time-permission-in-androidkotlin/
     }
         val CAMERA_REQUEST_CODE=123;
         fun setupPermissions() {
@@ -99,7 +86,6 @@ class AddFavour: NavigationDrawer() {
             val TakenImage = data?.extras?.get("data") as Bitmap
             imageView.setImageBitmap(TakenImage)
         }else{
-            
             super.onActivityResult(requestCode, resultCode, data)
         }
 }
