@@ -99,6 +99,7 @@ class AddFavour: NavigationDrawer() {
             val TakenImage = data?.extras?.get("data") as Bitmap
             imageView.setImageBitmap(TakenImage)
         }else{
+            
             super.onActivityResult(requestCode, resultCode, data)
         }
 }
