@@ -22,7 +22,8 @@ class AddFavour: NavigationDrawer() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_favour)
         BackButtonToHome.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
+            super.onBackPressed()
         }
         PlaceFavourRequest.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -84,6 +85,7 @@ class AddFavour: NavigationDrawer() {
             val TakenImage = data?.extras?.get("data") as Bitmap
             imageView.setImageBitmap(TakenImage)
             CrossButton.visibility = View.VISIBLE
+            imageView.visibility=View.VISIBLE
         }else{
             super.onActivityResult(requestCode, resultCode, data)
         }
