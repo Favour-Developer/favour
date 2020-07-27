@@ -27,7 +27,7 @@ class AddFavour: AppCompatActivity() {
         }
         PlaceFavourRequest.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
-
+//faslkfjasklfjsalkfj
         }
 
         val sw = findViewById<Switch>(R.id.switch1)
