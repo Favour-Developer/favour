@@ -27,20 +27,17 @@ class AddFavour: NavigationDrawer() {
         PlaceFavourRequest.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+        RequestButton.setOnClickListener {
+            startActivity(Intent(this, ViewFragment::class.java))
+        }
 
-//        val sw = findViewById<Switch>(R.id.switch1)
-//        sw?.setOnCheckedChangeListener { _, isChecked ->
-//            val msg = if (isChecked){
-//                "Yes"
-////                switch1.setBackgroundColor(Color.GREEN)
-//            }
-//            else {
-//                "No "
-////                switch1.setBackgroundColor(Color.RED)
-//            }
-//            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-//            sw.text = msg
-//        }
+        val sw = findViewById<Switch>(R.id.switch1)
+        sw.text = "No "
+        sw?.setOnCheckedChangeListener { _, isChecked ->
+            val msg = if (isChecked) "Yes" else "No "
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+            sw.text = msg
+        }
 
         OpenCamera.setOnClickListener {
             setupPermissions()
@@ -48,7 +45,6 @@ class AddFavour: NavigationDrawer() {
             startActivityForResult(TakePictureIntent, REQUEST_CODE)
             textView5.visibility = View.GONE
             OpenCamera.visibility = View.GONE
-            CrossButton.visibility = View.VISIBLE
         }
         CrossButton.setOnClickListener {
             textView5.visibility = View.VISIBLE
@@ -56,10 +52,12 @@ class AddFavour: NavigationDrawer() {
             CrossButton.visibility = View.GONE
             imageView.visibility = View.GONE
         }
+    }
+
         // CAMERA SETUP
         // https://pranaybhalerao.wordpress.com/2018/02/11/run-time-permission-in-androidkotlin/
-    }
-        val CAMERA_REQUEST_CODE=123;
+
+    val CAMERA_REQUEST_CODE=123;
         fun setupPermissions() {
             val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
             if (permission!= PackageManager.PERMISSION_GRANTED){
@@ -85,6 +83,7 @@ class AddFavour: NavigationDrawer() {
         if (requestCode== REQUEST_CODE && resultCode==Activity.RESULT_OK){
             val TakenImage = data?.extras?.get("data") as Bitmap
             imageView.setImageBitmap(TakenImage)
+            CrossButton.visibility = View.VISIBLE
         }else{
             super.onActivityResult(requestCode, resultCode, data)
         }

@@ -7,7 +7,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-<style name="switch1">
-    <item name="colorControlActivated">@color/Green</item>
-</style>
+    <style name="switch1" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#00C265</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#ff0000
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#C20000
+        </item>
+    </style>
+    <style name="SendColourChange">
+        <item name="colorControlNormal">#95D5B5</item>
+        <item name="colorControlActivated">#109D58</item>
+    </style>
 </resources>

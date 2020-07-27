@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     tools:context=".AddFavour">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +20,6 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/border"
             android:clickable="true"
-
             android:gravity="center"
             android:padding="3dp"
             android:text="Medicine"
@@ -62,7 +65,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@color/white"
-            android:src="@drawable/abc_vector_test"
+            android:src="@drawable/back_button"
             android:tint="@color/black"
             app:backgroundTint="@android:color/transparent"
             app:borderWidth="0dp"
@@ -246,15 +249,16 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:checked="false"
-            android:textOn="Yes"
-            android:textOff="No"
-            android:textColorLink="@color/Green"
+            android:theme="@style/switch1"
             app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:thumb="@drawable/round_thumb"
-            android:track="@drawable/round_track"
-            android:showText="true"
-            />
+           />
+<!--            android:thumb="@drawable/round_thumb"-->
+<!--            android:track="@drawable/round_track"-->
+<!--            />-->
+<!--        android:showText="true"-->
+<!--        android:textOn="Yes"-->
+<!--        android:textOff="No"-->
         <TextView
             android:id="@+id/textView4"
             android:layout_width="0dp"
@@ -300,21 +304,31 @@
             app:pressedTranslationZ="0dp"
             app:srcCompat="@android:drawable/btn_dialog" />
 
-        <TextView
-            android:id="@+id/PlaceFavourRequest"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/RequestButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="416dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/curveborder"
-            android:gravity="center"
-            android:padding="12dp"
-            android:text="Place Favour request"
-            android:textColor="#FFFFFF"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="View Request"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
+    <TextView
+        android:id="@+id/PlaceFavourRequest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/curveborder"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Place Favour request"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

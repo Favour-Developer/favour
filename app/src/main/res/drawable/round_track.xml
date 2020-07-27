@@ -6,6 +6,7 @@
         <solid android:color="@color/white"/>
         <stroke android:width="2dp" android:color="#cdcdcd"/>
     </shape>
+
 </item>
     <item android:state_checked="false">
         <shape android:shape="rectangle">
