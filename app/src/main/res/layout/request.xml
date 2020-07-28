@@ -21,7 +21,7 @@
                 android:id="@+id/shop_bor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shop_bg"
+                android:background="@drawable/curveborder"
                 android:paddingLeft="30dp"
                 android:paddingTop="10dp"
                 android:paddingRight="30dp"
@@ -35,12 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/urgent"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="Urgent"
+                android:background="@drawable/urgent_border"
+                android:text="URGENT"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>

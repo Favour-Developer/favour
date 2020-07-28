@@ -24,6 +24,8 @@
         <activity android:name=".AddFavour" />
         <activity android:name=".Login" />
         <activity android:name=".NavigationDrawer" />
+        <activity android:name=".ViewFragment" />
+        <activity android:name=".AcceptRequestFragment" />
     </application>
 
 </manifest>

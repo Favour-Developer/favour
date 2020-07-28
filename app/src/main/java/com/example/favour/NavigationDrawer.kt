@@ -79,8 +79,8 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     fun openAccount(view: View) {
         drawerLayout.closeDrawer(GravityCompat.START)
         frameLayout.removeAllViews()
-        supportFragmentManager.beginTransaction().add(R.id.framelayout, AccountFragment())
-            .addToBackStack("FragAccount").commit()
+//        supportFragmentManager.beginTransaction().add(R.id.framelayout, AccountFragment())
+//            .addToBackStack("FragAccount").commit()
     }
 
     fun contactUs(view: View) {
