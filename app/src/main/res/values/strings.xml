@@ -37,4 +37,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="favour_mail">info@favour.com</string>
+    <string name="iit_roorkee">IIT Roorkee</string>
+    <string name="favour_in">favour.in</string>
+    <string name="gotoLogin">Already have an account? <u>Log in</u></string>
 </resources>

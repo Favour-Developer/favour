@@ -1,20 +1,18 @@
 package com.example.favour
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.fragment_front_signin.*
+import kotlinx.android.synthetic.main.fragment_password.*
 
-
-class AccountFragment : Fragment() {
+class PasswordFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +25,7 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false)
+        return inflater.inflate(R.layout.fragment_password, container, false)
     }
 
     override fun onViewCreated(
@@ -36,17 +34,19 @@ class AccountFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         val session = Session(requireContext())
-        name_field.text = session.getUsername()
-        email.text = session.getEmail()
-        mobile.text = session.getMobile()
-        gender.text = session.getGender()
-        address.text = session.getAddress()
+        val s1 =  "Password for Mobile Number" + " XXXXXX" + (session.getMobile()?.takeLast(4))
+        passMobText.text = s1
+        Log.d("Username",session.getUsername().toString())
+        Log.d("Mobile",session.getMobile().toString())
+        Log.d("Verified", session.getVerifiedState().toString())
+        passSigUp.setOnClickListener(View.OnClickListener {
 
-        edit_profile.setOnClickListener(View.OnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.framelayout, EditProfileFragment())
-                .addToBackStack("FragEditProfile").commit()
+            if (CheckerMatcher().checkPassPass(pass1, pass2)) {
+
+                startActivity(Intent(context, MainActivity::class.java))
+            activity?.finish()
+        }
         })
-
     }
 
 }

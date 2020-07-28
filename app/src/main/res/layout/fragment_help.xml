@@ -9,7 +9,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/splash_image" />
+        android:src="@drawable/splash_image"
+        android:contentDescription="TODO" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,9 +27,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoLink="map"
-        android:linksClickable="true"
         android:drawableStart="@drawable/location"
-        android:text="IIT Roorkee"
+        android:linksClickable="true"
+        android:text="@string/iit_roorkee"
         android:textColor="@color/black1"
         android:textSize="22sp" />
 
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:linksClickable="true"
-        android:text="favour.in"
+        android:text="@string/favour_in"
         android:textColor="@color/white"
         android:textSize="22sp" />
 

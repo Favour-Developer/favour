@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,12 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
         navView = findViewById(R.id.nav_view)
         frameLayout = findViewById(R.id.framelayout)
         val toolbar: Toolbar = findViewById(R.id.toolBar_main)
+        val session = Session(this)
+        val navigation = findViewById<NavigationView>(R.id.nav_view)
+        val navHeader: View = navigation.getHeaderView(0)
+        navHeader.findViewById<TextView>(R.id.userName).text = session.getUsername()
+        navHeader.findViewById<TextView>(R.id.userNumber).text = session.getMobile()
+
 
         t = ActionBarDrawerToggle(
             this,
@@ -75,7 +82,8 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
         supportFragmentManager.beginTransaction().add(R.id.framelayout, AccountFragment())
             .addToBackStack("FragAccount").commit()
     }
-    fun contactUs(view: View){
+
+    fun contactUs(view: View) {
         frameLayout.removeAllViews()
         supportFragmentManager.beginTransaction().add(R.id.framelayout, HelpFragment())
             .addToBackStack("fragHelp").commit()
@@ -117,7 +125,10 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else if (supportFragmentManager.backStackEntryCount > 0) {
+        } else if(supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name == "FragEditProfile"){
+            super.onBackPressed()
+        }
+        else if (supportFragmentManager.backStackEntryCount > 0) {
             startActivity(Intent(applicationContext, MainActivity::class.java))
             finish()
         } else {
@@ -127,21 +138,16 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
 
 
     override fun setContentView(view: View?) {
-        if (frameLayout != null) {
-            val lp = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            frameLayout.addView(view, lp)
-        }
+        val lp = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        frameLayout.addView(view, lp)
     }
 
     override fun setContentView(view: View?, params: ViewGroup.LayoutParams?) {
-        if (frameLayout != null) {
-            frameLayout.addView(view, params)
-        }
+        frameLayout.addView(view, params)
     }
-
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)

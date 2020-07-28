@@ -30,7 +30,7 @@ class MyRequestFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         populateData()
-        val adapter = RequestRecyclerAdapter(context!!, data)
+        val adapter = RequestRecyclerAdapter(requireContext(), data)
         recyclerView.adapter = adapter
     }
 

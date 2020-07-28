@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/email"
-                android:hint="Email"
+                android:hint="Mobile Number"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:textColor="@color/black1"

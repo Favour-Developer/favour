@@ -1,20 +1,16 @@
 package com.example.favour
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.fragment_otp.*
 
 
-class AccountFragment : Fragment() {
+class OtpFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +23,7 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false)
+        return inflater.inflate(R.layout.fragment_otp, container, false)
     }
 
     override fun onViewCreated(
@@ -36,17 +32,20 @@ class AccountFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         val session = Session(requireContext())
-        name_field.text = session.getUsername()
-        email.text = session.getEmail()
-        mobile.text = session.getMobile()
-        gender.text = session.getGender()
-        address.text = session.getAddress()
+        session.setVerifiedState(true)
+        val s1 = "One Time Password (OTP) has been sent to your mobile"
+        val s2 = ", please enter the same here to login"
+        val s = s1 + " XXXXXX" + (session.getMobile()?.takeLast(4)) + s2
+        otpText.text = s
+        otpSignUp.setOnClickListener(View.OnClickListener {
 
-        edit_profile.setOnClickListener(View.OnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.framelayout, EditProfileFragment())
-                .addToBackStack("FragEditProfile").commit()
+//            val fml = R.id.fml_signin
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fml_signin, PasswordFragment()).addToBackStack("FragOTP")
+                .commit()
+
+
         })
-
     }
 
 }
