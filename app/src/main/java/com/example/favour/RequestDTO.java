@@ -1,6 +1,5 @@
 package com.example.favour;
 
-import android.graphics.drawable.Drawable;
 
 public class RequestDTO {
     private String person_name;
@@ -9,15 +8,21 @@ public class RequestDTO {
     private Integer timer;
     private Boolean urgent;
     private Integer shop_bor;
+    private String items;
 
 
-    public RequestDTO(String person_name, String requestID, String categories, Integer timer, Boolean urgent, Integer shop_bor) {
+    public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor) {
         this.person_name = person_name;
         this.requestID = requestID;
         this.categories = categories;
         this.timer = timer;
         this.urgent = urgent;
         this.shop_bor = shop_bor;
+        this.items = items;
+    }
+
+    public String getItems() {
+        return items;
     }
 
     public String getPerson_name() {

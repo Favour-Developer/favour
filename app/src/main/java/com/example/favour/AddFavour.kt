@@ -29,7 +29,7 @@ class AddFavour: NavigationDrawer() {
             startActivity(Intent(this, MainActivity::class.java))
         }
         RequestButton.setOnClickListener {
-            startActivity(Intent(this, ViewFragment::class.java))
+            supportFragmentManager.beginTransaction().replace(R.id.root,ViewRequestFragment()).addToBackStack("FragViewRequest").commit()
         }
 
         val sw = findViewById<Switch>(R.id.switch1)

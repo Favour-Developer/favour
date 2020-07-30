@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -19,8 +20,10 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val session = Session(this)
 //        val progressDialog: ProgressBar? = null
         mAuth = FirebaseAuth.getInstance()
+//        val progressBar = ProgressBar(this)
         //action on clicking login button
         login.setOnClickListener {
             if (!IsOnline().connectedToInternet(applicationContext)) {
@@ -29,11 +32,11 @@ class Login : AppCompatActivity() {
 
 
             //checking the empty fields
-            if (CheckerMatcher().checkEmptyEmailPass(emailtext, passText)) {
+            if (CheckerMatcher().checkEmptyPhonePass(mobileLogin, passLogin)) {
 //                progressDialog.V
                 mAuth!!.signInWithEmailAndPassword(
-                    emailtext.text.toString(),
-                    passText.text.toString()
+                    mobileLogin.text.toString() + "@favour.com" ,
+                    passLogin.text.toString()
                 )
                     .addOnCompleteListener(
                         this
@@ -45,11 +48,9 @@ class Login : AppCompatActivity() {
                                 this, "Authentication Success.",
                                 Toast.LENGTH_SHORT
                             ).show()
-//                            val user = mAuth!!.currentUser
-                            val data = getSharedPreferences("Data", Context.MODE_PRIVATE)
-                            data.edit().putBoolean("isLogged", true)
-                                .apply()
 
+                            session.setLoginState(true)
+                            session.setMobile(mobileLogin.text.toString())
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
 
@@ -72,30 +73,6 @@ class Login : AppCompatActivity() {
         }
 
     }
-//
-//    private fun checkEmptyField(emailText: EditText, pasText: EditText): Boolean {
-//        if (!isEmail(emailtext)) {
-//            emailtext.error = "Enter valid email."
-//            return false
-//        }
-//        if (!isPassword(passText.text.toString())) {
-//            passText.error = "Enter valid password."
-//            return false
-//        }
-//        return true
-//    }
-//
-//    //to check whether the string entered in the email field is in the format of email address
-//    private fun isEmail(text: EditText): Boolean {
-//        val email: CharSequence = text.text.toString()
-//        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email)
-//            .matches()
-//    }
-//
-//    //to check whether the length of the password is atleast of 8 characters
-//    private fun isPassword(password: String): Boolean {
-//        return !TextUtils.isEmpty(password) && password.length >= 8
-//    }
 
     //dialog box to show no internet connection
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

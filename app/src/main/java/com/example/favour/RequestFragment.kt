@@ -41,6 +41,7 @@ class RequestFragment : Fragment() {
                 "Ritik Gupta",
                 "reqshrit1",
                 "Grocery, Shopping, Medicine",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 true,
                 0
@@ -51,6 +52,7 @@ class RequestFragment : Fragment() {
                 "Shadab",
                 "reqbosha1",
                 "Laptop",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 true,
                 1
@@ -61,6 +63,7 @@ class RequestFragment : Fragment() {
                 "Shadab",
                 "reqbosha2",
                 "Zindagi",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 false,
                 1
@@ -71,6 +74,7 @@ class RequestFragment : Fragment() {
                 "Ritik",
                 "reqborit2",
                 "PPO",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 true,
                 1
@@ -81,6 +85,7 @@ class RequestFragment : Fragment() {
                 "Vedant",
                 "reqshved1",
                 "Personal Care",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 false,
                 0

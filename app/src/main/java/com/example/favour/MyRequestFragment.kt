@@ -39,7 +39,8 @@ class MyRequestFragment : Fragment() {
             RequestDTO(
                 "Ritik Gupta",
                 "reqshrit1",
-                "Grocery, Shopping, Medicine",
+                "Grocery, Medicine",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 true,
                 0
@@ -50,6 +51,7 @@ class MyRequestFragment : Fragment() {
                 "Shadab",
                 "reqbosha1",
                 "Laptop",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 true,
                 1
@@ -60,6 +62,7 @@ class MyRequestFragment : Fragment() {
                 "Shadab",
                 "reqbosha2",
                 "Zindagi",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 false,
                 1
@@ -70,6 +73,7 @@ class MyRequestFragment : Fragment() {
                 "Ritik",
                 "reqborit2",
                 "PPO",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 true,
                 1
@@ -80,6 +84,7 @@ class MyRequestFragment : Fragment() {
                 "Vedant",
                 "reqshved1",
                 "Personal Care",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 false,
                 0
@@ -90,6 +95,7 @@ class MyRequestFragment : Fragment() {
                 "Vedant",
                 "reqshved1",
                 "Personal Care",
+                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
                 6,
                 false,
                 0

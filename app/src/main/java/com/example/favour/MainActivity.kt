@@ -54,6 +54,9 @@ class MainActivity : NavigationDrawer() {
             })
         }
 
+
+
+
 //    override fun onBackPressed() {
 //        if(supportFragmentManager.fragments.size != 0)
 //            viewPager.currentItem

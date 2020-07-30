@@ -16,12 +16,14 @@ class Session() {
 
     val IS_LOGIN = "IsLoggedIn"
     val IS_MOBILE_VERIFIED = "IsMobileVerified"
+    val IS_SIGNED_UP = "IsSignedUp"
 
     val NAME = "Name"
     val EMAIL = "Email"
     val ADDRESS = "Address"
     val MOBILE = "Mobile_Number"
     val GENDER = "GENDER"
+
 
 
     constructor(context: Context) : this() {
@@ -75,11 +77,19 @@ class Session() {
     }
 
     fun setLoginState(b: Boolean) {
-        editor.putBoolean(IS_LOGIN, b)
+        editor.putBoolean(IS_LOGIN, b).apply()
     }
 
     fun getLoginState(): Boolean? {
         return pref.getBoolean(IS_LOGIN, false)
+    }
+
+    fun setSignUpState(b: Boolean) {
+        editor.putBoolean(IS_SIGNED_UP, b).apply()
+    }
+
+    fun getSignUpState(): Boolean? {
+        return pref.getBoolean(IS_SIGNED_UP, false)
     }
 
     fun setVerifiedState(b: Boolean) {

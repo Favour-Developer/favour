@@ -1,6 +1,7 @@
 package com.example.favour
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.favour.RequestRecyclerAdapter.PlaceHolder
+import com.google.gson.Gson
+import java.io.Serializable
 import java.lang.StringBuilder
 
 class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<RequestDTO>) :
@@ -44,6 +47,10 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
         if (dataList[position].urgent == false) holder.urgent!!.visibility = View.GONE
     }
 
+    interface clickListener {
+        fun onClickListener()
+    }
+
     inner class PlaceHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var icon: ImageView? = null
         var personName: TextView? = null
@@ -60,11 +67,9 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
             shopBor = itemView.findViewById(R.id.shop_bor)
             urgent = itemView.findViewById(R.id.urgent_request)
             itemView.setOnClickListener(View.OnClickListener {
-                Toast.makeText(
-                    context,
-                    dataList[adapterPosition].requestID,
-                    Toast.LENGTH_LONG
-                ).show()
+                val intent = Intent(context, ProcessFlowActivity::class.java)
+                intent.putExtra("Request_Object",Gson().toJson(dataList[adapterPosition]))
+                context.startActivity(intent)
             })
         }
 

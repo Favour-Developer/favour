@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 
 
 open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -25,6 +27,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     private lateinit var navView: NavigationView
     private lateinit var t: ActionBarDrawerToggle
     private lateinit var frameLayout: FrameLayout
+    private lateinit var session: Session
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         super.setContentView(R.layout.activity_navigation_drawer)
@@ -32,7 +35,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
         navView = findViewById(R.id.nav_view)
         frameLayout = findViewById(R.id.framelayout)
         val toolbar: Toolbar = findViewById(R.id.toolBar_main)
-        val session = Session(this)
+        session = Session(applicationContext)
         val navigation = findViewById<NavigationView>(R.id.nav_view)
         val navHeader: View = navigation.getHeaderView(0)
         navHeader.findViewById<TextView>(R.id.userName).text = session.getUsername()
@@ -79,8 +82,8 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     fun openAccount(view: View) {
         drawerLayout.closeDrawer(GravityCompat.START)
         frameLayout.removeAllViews()
-//        supportFragmentManager.beginTransaction().add(R.id.framelayout, AccountFragment())
-//            .addToBackStack("FragAccount").commit()
+        supportFragmentManager.beginTransaction().add(R.id.framelayout, AccountFragment())
+            .addToBackStack("FragAccount").commit()
     }
 
     fun contactUs(view: View) {
@@ -96,11 +99,8 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
             .setPositiveButton(
                 "Yes"
             ) { _, _ ->
-                val data = getSharedPreferences("Data", Context.MODE_PRIVATE)
-                data.edit().apply() {
-                    putBoolean("isLogged", false)
-                }.apply()
-
+               session.setLoginState(false)
+//                Log.i("Session",Gson().toJson(session.toString()).toString())
                 startActivity(Intent(this, Login::class.java))
             }
             .setNegativeButton(

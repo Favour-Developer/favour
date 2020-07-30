@@ -21,6 +21,20 @@ class CheckerMatcher() {
         }
         return true
     }
+    fun checkEmptyPhonePass(
+        pht: EditText,
+        pwt: EditText
+    ): Boolean {
+        if (!isPhone(pht.text.toString())) {
+            pht.error = "Enter valid mobile number. Make Sure of exactly 10 characters."
+            return false
+        }
+        if (!isPassword(pwt.text.toString())) {
+            pwt.error = "Enter valid password."
+            return false
+        }
+        return true
+    }
 
     fun checkEmptyNamePhone(
         nt: EditText,

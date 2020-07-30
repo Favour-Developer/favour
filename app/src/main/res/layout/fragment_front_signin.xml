@@ -52,12 +52,5 @@
         android:text="@string/gotoLogin"
         android:textColor="@color/black" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/gSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:elevation="10dp" />
-
 
 </LinearLayout>

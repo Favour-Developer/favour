@@ -19,8 +19,13 @@
         <item name="android:colorForeground">#C20000
         </item>
     </style>
-    <style name="SendColourChange">
-        <item name="colorControlNormal">#95D5B5</item>
-        <item name="colorControlActivated">#109D58</item>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

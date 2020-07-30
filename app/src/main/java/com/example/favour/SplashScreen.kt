@@ -13,10 +13,14 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+        val session = Session(this)
         Handler().postDelayed(Runnable {
-            if (getSharedPreferences("Data", Context.MODE_PRIVATE).getBoolean("isLogged", false)) {
+            if (session.getLoginState()!! && session.getSignUpState()!!) {
                 startActivity(Intent(this, MainActivity::class.java))
-            } else startActivity(Intent(this, Login::class.java))
+            } else if
+            (!session.getLoginState()!! && !session.getSignUpState()!!) startActivity(Intent(this, SignUp::class.java))
+            else
+                startActivity(Intent(this, Login::class.java))
             finish()
         }, SPLASH_TIME_OUT.toLong())
 
