@@ -9,12 +9,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : NavigationDrawer() {
     private lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager
+    val REQUEST_CODE = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AddFavourRequest.setOnClickListener {
-            startActivity(Intent(this, AddFavour::class.java))
+            startActivityForResult(Intent(this, AddFavour::class.java),REQUEST_CODE)
         }
         tabLayout = findViewById(R.id.tabs)
         viewPager = findViewById(R.id.pager)
@@ -54,12 +55,9 @@ class MainActivity : NavigationDrawer() {
             })
         }
 
-
-
-
-//    override fun onBackPressed() {
-//        if(supportFragmentManager.fragments.size != 0)
-//            viewPager.currentItem
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        
+    }
 
     }

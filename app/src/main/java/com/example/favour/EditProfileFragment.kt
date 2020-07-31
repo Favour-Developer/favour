@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -42,8 +46,9 @@ class EditProfileFragment : Fragment() {
         val session = Session(requireContext())
         editEmail.setText(session.getEmail())
         editMobile.setText(session.getMobile())
-        editGender.text = (session.getGender())
         editAddress.setText(session.getAddress())
+
+        genderGroup.clearCheck()
 
 
         // Configure Google Sign In
@@ -54,16 +59,22 @@ class EditProfileFragment : Fragment() {
 
         val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         google_signIn.setOnClickListener(View.OnClickListener {
-            val signInIntent =googleSignInClient.signInIntent
+            val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, Companion.RC_SIGN_IN)
         })
 
         update_bio.setOnClickListener(View.OnClickListener {
             session.setAddress(editAddress.text.toString())
             session.setEmail(editEmail.text.toString())
-            session.setGender(editGender.text.toString())
-
-            requireActivity().supportFragmentManager.beginTransaction().remove(this).add(R.id.framelayout, AccountFragment())
+            val radioId = genderGroup.checkedRadioButtonId
+            if (radioId != -1) {
+                session.setGender(view.findViewById<RadioButton>(radioId).text.toString())
+            }
+            val fm = requireActivity().supportFragmentManager
+            fm.popBackStack("FragEditProfile",FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//            fm.popBackStack("FragAccount",FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            requireActivity().supportFragmentManager.beginTransaction().remove(this)
+                .add(R.id.framelayout, AccountFragment())
                 .addToBackStack("FragEditProfile").commit()
         })
 
@@ -117,15 +128,16 @@ class EditProfileFragment : Fragment() {
                     // [START_EXCLUDE]
 //                    val view = binding.mainLayout
                     // [END_EXCLUDE]
-                    Toast.makeText(requireContext(), "Authentication Failed.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Authentication Failed.", Toast.LENGTH_SHORT)
+                        .show()
 //                    updateUI(null)
                 }
             }
-                
 
-                // [START_EXCLUDE]
+
+        // [START_EXCLUDE]
 //                hideProgressBar()
-                // [END_EXCLUDE]
+        // [END_EXCLUDE]
 
     }
 

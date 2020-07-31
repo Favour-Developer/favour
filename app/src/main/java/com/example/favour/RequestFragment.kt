@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_request.*
 
 
 class RequestFragment : Fragment() {
-    val data: MutableList<RequestDTO> = ArrayList()
+    private val data: MutableList<RequestDTO> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -125,7 +125,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else if(supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name == "FragEditProfile"){
+        } else if(supportFragmentManager.backStackEntryCount > 0 && supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name == "FragEditProfile"){
             super.onBackPressed()
         }
         else if (supportFragmentManager.backStackEntryCount > 0) {
