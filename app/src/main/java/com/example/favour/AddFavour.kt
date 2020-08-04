@@ -32,6 +32,8 @@ class AddFavour : NavigationDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_favour)
+        val id = intent.getIntExtra("Type", 0)
+        shop_bor_spinner.setSelection(id)
         BackButtonToHome.setOnClickListener {
 //            startActivity(Intent(this, MainActivity::class.java))
             super.onBackPressed()
@@ -39,29 +41,32 @@ class AddFavour : NavigationDrawer() {
         val session = Session(this)
         PlaceFavourRequest.setOnClickListener {
             Log.i("HashMap", hashmap.toString())
-            if (textItems.text.isEmpty()) textItems.error = "This can't be blank."
-            else if (getCnt() == 0) Toast.makeText(
-                this,
-                "Please select atleast one category.",
-                Toast.LENGTH_SHORT
-            ).show()
-            else {
-                val requestDTO = RequestDTO(
-                    session.getUsername(),
-                    session.getMobile(),
-                    getItemCategories(),
-                    textItems.text.toString(),
-                    6,
-                    urgent_switch.isChecked,
-                    shop_bor_spinner.selectedItemPosition
-                )
-                createAndUpload(requestDTO)
-                startActivity(Intent(this, MainActivity::class.java))
+            when {
+                textItems.text.isEmpty() -> {
+                    textItems.error = "This can't be blank."
+                }
+                getCnt() == 0 -> {
+                    Toast.makeText(
+                        this,
+                        "Please select atleast one category.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {
+                    val requestDTO = RequestDTO(
+                        session.getUsername(),
+                        session.getMobile(),
+                        getItemCategories(),
+                        textItems.text.toString(),
+                        6,
+                        urgent_switch.isChecked,
+                        shop_bor_spinner.selectedItemPosition
+                    )
+                    createAndUpload(requestDTO)
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
             }
-        }
-        RequestButton.setOnClickListener {
-            supportFragmentManager.beginTransaction().replace(R.id.root, ViewRequestFragment())
-                .addToBackStack("FragViewRequest").commit()
         }
 
         val sw = findViewById<Switch>(R.id.urgent_switch)
@@ -89,7 +94,7 @@ class AddFavour : NavigationDrawer() {
     }
 
     private fun createAndUpload(requestDTO: RequestDTO) {
-        val database  = FirebaseDatabase.getInstance().reference
+        val database = FirebaseDatabase.getInstance().reference
         database.child("requests").push().setValue(requestDTO)
     }
 

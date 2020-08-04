@@ -23,6 +23,7 @@ class Session() {
     val ADDRESS = "Address"
     val MOBILE = "Mobile_Number"
     val GENDER = "GENDER"
+    val PHOTOURL = "PHOTO_URL"
 
 
 
@@ -52,7 +53,7 @@ class Session() {
         return pref.getString(EMAIL, "Add Email")
     }
 
-    fun setGender(gender: String) {
+    fun setGender(gender: String?) {
         editor.putString(GENDER, gender).apply()
     }
 
@@ -73,7 +74,14 @@ class Session() {
     }
 
     fun getMobile(): String? {
-        return pref.getString(MOBILE, "Add Mobile")
+        return pref.getString(MOBILE, "")
+    }
+    fun setPhotoUrl(address: String?) {
+        editor.putString(PHOTOURL, address).apply()
+    }
+
+    fun getPhotoUrl(): String? {
+        return pref.getString(PHOTOURL, "")
     }
 
     fun setLoginState(b: Boolean) {

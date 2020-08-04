@@ -1,15 +1,21 @@
 package com.example.favour
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_request.*
 
 class MyRequestFragment : Fragment() {
-    val data: MutableList<RequestDTO> = ArrayList()
+    private var data: ArrayList<RequestDTO> = ArrayList()
+    lateinit var adapter: RequestRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,77 +36,29 @@ class MyRequestFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         populateData()
-        val adapter = RequestRecyclerAdapter(requireContext(), data)
-        recyclerView.adapter = adapter
+
     }
 
     private fun populateData() {
-        data.add(
-            RequestDTO(
-                "Ritik Gupta",
-                "reqshrit1",
-                "Grocery, Medicine",
-                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
-                6,
-                true,
-                0
-            )
-        )
-        data.add(
-            RequestDTO(
-                "Shadab",
-                "reqbosha1",
-                "Laptop",
-                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
-                6,
-                true,
-                1
-            )
-        )
-        data.add(
-            RequestDTO(
-                "Shadab",
-                "reqbosha2",
-                "Zindagi",
-                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
-                6,
-                false,
-                1
-            )
-        )
-        data.add(
-            RequestDTO(
-                "Ritik",
-                "reqborit2",
-                "PPO",
-                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
-                6,
-                true,
-                1
-            )
-        )
-        data.add(
-            RequestDTO(
-                "Vedant",
-                "reqshved1",
-                "Personal Care",
-                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
-                6,
-                false,
-                0
-            )
-        )
-        data.add(
-            RequestDTO(
-                "Vedant",
-                "reqshved1",
-                "Personal Care",
-                "Potatoes, Beans, Cabbage \n Beans Paracetamol, Combiflam",
-                6,
-                false,
-                0
-            )
-        )
+        val database  = FirebaseDatabase.getInstance().reference
+        database.child("requests").addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Failed to read", error.toException().toString())
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                data.clear()
+                for(snap in snapshot.children){
+                    val requestDTO = snap.getValue(RequestDTO::class.java)
+                    if(requestDTO?.requestID == Session(requireContext()).getMobile())
+                        data.add(0,requestDTO!!)
+                }
+                if(data.size > 0) blank.visibility = View.GONE
+                adapter = RequestRecyclerAdapter(requireContext(), data)
+                recyclerView.adapter = adapter
+            }
+
+        })
     }
 
 }

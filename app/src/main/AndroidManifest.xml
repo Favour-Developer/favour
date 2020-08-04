@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -14,17 +15,23 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
-        <activity android:name=".SplashScreen">
+        <activity
+            android:name=".SplashScreen"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProcessFlowActivity" />
+        <activity
+            android:name=".ProcessFlowActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".AddFavour" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NavigationDrawer" />
+        <activity
+            android:name=".NavigationDrawer"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
     </application>
 
 </manifest>

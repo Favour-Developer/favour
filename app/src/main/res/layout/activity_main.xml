@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -24,25 +25,86 @@
             app:tabSelectedTextColor="@color/black1"
             app:tabTextColor="@color/grey">
 
-            <!--            <com.google.android.material.tabs.TabItem-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="Favour Requests" />-->
-
-            <!--            <com.google.android.material.tabs.TabItem-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="My Requests" />-->
         </com.google.android.material.tabs.TabLayout>
     </androidx.viewpager.widget.ViewPager>
+
+    <View
+        android:id="@+id/shadowView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F2FFFFFF"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/shopping_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="155dp"
+        android:background="@drawable/border"
+        android:gravity="center"
+        android:text="Shopping"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/shoppingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="150dp"
+        android:elevation="6dp"
+        android:src="@drawable/shopping"
+        android:visibility="invisible"
+        app:backgroundTint="#EEEEEE"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/borrowing_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="85dp"
+        android:background="@drawable/border"
+        android:gravity="center"
+        android:text="@string/borrowing"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/borrowingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="80dp"
+        android:elevation="6dp"
+        android:src="@drawable/borrowing"
+        android:visibility="invisible"
+        app:backgroundTint="#EEEEEE"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/AddFavourRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:elevation="6dp"
         android:src="@drawable/add"
         app:backgroundTint="@color/appTheme"
+        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,13 +19,13 @@ class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 //            val args = Bundle()
 //            args.putString("Favour Requests", "favourRequests")
 //            favourRequests.arguments = args
-            return MyRequestFragment()
+            return RequestFragment()
         }
 //        val myRequests = RequestFragment()
 //        val args = Bundle()
 //        args.putString("Favour Requests", "myRequests")
 //        myRequests.arguments = args
-        return RequestFragment()
+        return MyRequestFragment()
 
     }
 

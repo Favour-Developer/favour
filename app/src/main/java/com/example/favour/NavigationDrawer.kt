@@ -9,9 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -19,6 +17,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_account.*
 
 
 open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +40,11 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
         val navHeader: View = navigation.getHeaderView(0)
         navHeader.findViewById<TextView>(R.id.userName).text = session.getUsername()
         navHeader.findViewById<TextView>(R.id.userNumber).text = session.getMobile()
+        if (session.getPhotoUrl() != "") {
+            Picasso.with(this)
+                .load(session.getPhotoUrl())
+                .into(navHeader.findViewById<ImageView>(R.id.userImage))
+        }
 
 
         t = ActionBarDrawerToggle(
@@ -99,7 +104,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
             .setPositiveButton(
                 "Yes"
             ) { _, _ ->
-               session.setLoginState(false)
+                session.setLoginState(false)
 //                Log.i("Session",Gson().toJson(session.toString()).toString())
                 startActivity(Intent(this, Login::class.java))
             }
@@ -125,10 +130,12 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else if(supportFragmentManager.backStackEntryCount > 0 && supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name == "FragEditProfile"){
+        } else if (supportFragmentManager.backStackEntryCount > 0 && supportFragmentManager.getBackStackEntryAt(
+                supportFragmentManager.backStackEntryCount - 1
+            ).name == "FragEditProfile"
+        ) {
             super.onBackPressed()
-        }
-        else if (supportFragmentManager.backStackEntryCount > 0) {
+        } else if (supportFragmentManager.backStackEntryCount > 0) {
             startActivity(Intent(applicationContext, MainActivity::class.java))
             finish()
         } else {

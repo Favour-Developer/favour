@@ -1,6 +1,7 @@
 package com.example.favour
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_otp.*
 import java.util.concurrent.TimeUnit
 
 
+@Suppress("DEPRECATION")
 class OtpFragment : Fragment() {
 
 
@@ -34,6 +36,7 @@ class OtpFragment : Fragment() {
         name = arguments?.getString("Name").toString()
         return inflater.inflate(R.layout.fragment_otp, container, false)
     }
+
     companion object {
         lateinit var mobileNum: String
         lateinit var name: String
@@ -44,6 +47,25 @@ class OtpFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        val timer = object : CountDownTimer(30000, 1000) {
+            override fun onFinish() {
+                OTPtimer.visibility = View.GONE
+                otpResend.setTextColor(resources.getColor(R.color.blue))
+            }
+
+            override fun onTick(tick: Long) {
+                val s: String = resources.getString(R.string.otp_timer) + (tick/1000).toString()
+                OTPtimer.text = s
+            }
+        }
+        timer.start()
+        otpResend.setOnClickListener(View.OnClickListener {
+            if (otpResend.textColors.defaultColor == resources.getColor(R.color.blue)) {
+                otpResend.setTextColor(resources.getColor(R.color.grey))
+                OTPtimer.visibility = View.VISIBLE
+                timer.start()
+            }
+        })
         val session = Session(requireContext())
 //        var verificationId: String? = null
         val s1 = "One Time Password (OTP) has been sent to your mobile"
@@ -90,8 +112,9 @@ class OtpFragment : Fragment() {
          */
         otpSignUp.setOnClickListener(View.OnClickListener {
             if ((otp.text.toString() == "123456") || session.getVerifiedState()!!) {
+                timer.cancel()
                 val bundle = Bundle()
-                bundle.putString("Name",name)
+                bundle.putString("Name", name)
                 bundle.putString("Mobile", mobileNum)
                 val frag = PasswordFragment()
                 frag.arguments = bundle

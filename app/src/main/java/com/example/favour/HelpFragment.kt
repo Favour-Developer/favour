@@ -1,18 +1,36 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.favour
 
+import android.app.ProgressDialog
 import android.content.Intent
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_help.*
+import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class HelpFragment : Fragment() {
+    private var image: Intent? = null
+    private var imageLink: String = ""
+    lateinit var d: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,20 +44,115 @@ class HelpFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_help, container, false)
     }
+
     override fun onViewCreated(
         @NonNull view: View,
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        val location = view.findViewById<TextView>(R.id.address)
-        location.setOnClickListener {
-            val geoIntent = Intent(
-                Intent.ACTION_VIEW, Uri.parse(
-                    "geo:0,0?q="
-                            + location.text.toString()
-                )
+        BackButtonToHome.setOnClickListener(View.OnClickListener {
+            requireActivity().onBackPressed()
+        })
+        selectImage.setOnClickListener(View.OnClickListener {
+            val intent = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             )
-            startActivity(geoIntent)
+            startActivityForResult(Intent.createChooser(intent, "Select Photo"), 2)
+        })
+
+        deleteImage.setOnClickListener(View.OnClickListener {
+            imageSelected.visibility = View.GONE
+            deleteImage.visibility = View.GONE
+            selectImage.visibility = View.VISIBLE
+        })
+
+        uploadIssue.setOnClickListener(View.OnClickListener {
+            if (!TextUtils.isEmpty(issueText.text)) {
+                val database = FirebaseDatabase.getInstance().reference
+                d = database.child("Issues").child(FirebaseAuth.getInstance().uid.toString()).push()
+                d.setValue(
+                    FirebaseAuth.getInstance().uid + "-" + SimpleDateFormat(
+                        "yyyyMMdd_HHmmss",
+                        Locale.US
+                    ).format(
+                        Date()
+                    )
+                )
+                d.child("issueText").setValue(imageLink)
+                if (image != null) {
+                    report()
+                } else requireActivity().onBackPressed()
+
+            } else issueText.error = "This can't be blank."
+        })
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2) {
+
+            if (data != null) {
+                image = data
+                selectImage.visibility = View.GONE
+                imageSelected.visibility = View.VISIBLE
+                deleteImage.visibility = View.VISIBLE
+
+
+            } else image = null
         }
+    }
+
+    private fun report() {
+        imageLink = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.US
+        ).format(
+            Date()
+        )
+        val ref = FirebaseStorage.getInstance().reference.child("Issues")
+            .child(FirebaseAuth.getInstance().uid.toString()).child(imageLink)
+        val progressDialog = ProgressDialog(requireContext())
+        progressDialog.setTitle("Uploading Image ...")
+        progressDialog.show()
+        val uri = image?.data
+
+        val bitmap: Bitmap = BitmapFactory.decodeStream(
+            context?.contentResolver?.openInputStream(uri!!),
+            null,
+            BitmapFactory.Options()
+        )!!
+
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val dat = baos.toByteArray()
+        val uploadTask = ref.putBytes(dat)
+        uploadTask.addOnFailureListener { exception ->
+            Log.d("Error", exception.toString())
+            progressDialog.dismiss()
+        }.addOnSuccessListener { taskSnapshot ->
+            progressDialog.dismiss()
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref.downloadUrl
+            }
+        }.addOnCompleteListener { it ->
+            if (it.isSuccessful) {
+                requireActivity().onBackPressed()
+
+            } else
+                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+        }
+            .addOnProgressListener { taskSnapshot ->
+                val progress =
+                    (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+                progressDialog.setMessage("Uploaded: " + progress.toInt() + "%...")
+            }
     }
 }

@@ -3,16 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="20dp"
     android:orientation="vertical"
     tools:context=".EditProfileFragment">
 
-    <ImageView
-        android:id="@+id/userImage"
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="50dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/appTheme"
+            android:scaleType="centerCrop"
+            android:src="@drawable/account" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/changePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/account" />
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:text="Change Photo"
+        android:textAllCaps="false"
+        android:textColor="@color/blue" />
+
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_signIn"
@@ -119,9 +141,9 @@
                     android:textColor="@color/grey" />
 
                 <RadioGroup
+                    android:id="@+id/genderGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/genderGroup"
                     android:orientation="horizontal">
 
                     <RadioButton

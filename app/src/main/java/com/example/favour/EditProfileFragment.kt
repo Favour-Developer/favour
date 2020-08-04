@@ -2,28 +2,39 @@ package com.example.favour
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
 
 
 class EditProfileFragment : Fragment() {
+
+    private val CHOOSE_IMAGE = 1
+    private lateinit var session: Session
+    private var path: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +54,21 @@ class EditProfileFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        val session = Session(requireContext())
+        session = Session(requireContext())
         editEmail.setText(session.getEmail())
-        editMobile.setText(session.getMobile())
+        editMobile.text = session.getMobile()
         editAddress.setText(session.getAddress())
-
+        if (session.getPhotoUrl() != "") Picasso.with(requireContext()).load(session.getPhotoUrl())
+            .into(userImage)
         genderGroup.clearCheck()
+
+        changePhoto.setOnClickListener(View.OnClickListener {
+            val intent = Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            )
+            startActivityForResult(Intent.createChooser(intent, "Select Photo"), CHOOSE_IMAGE)
+        })
 
 
         // Configure Google Sign In
@@ -64,14 +84,44 @@ class EditProfileFragment : Fragment() {
         })
 
         update_bio.setOnClickListener(View.OnClickListener {
+            if(path!="") session.setPhotoUrl(path)
             session.setAddress(editAddress.text.toString())
             session.setEmail(editEmail.text.toString())
+
+            val storageReference: StorageReference = FirebaseStorage.getInstance().reference
+                .child(FirebaseAuth.getInstance().uid.toString())
+            storageReference.putFile(Uri.parse(path))
+                .continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                   storageReference.downloadUrl
+                }
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result
+                        Log.d("URL",downloadUri.toString())
+                    } else {
+                        Log.d("URL","Failed")
+                    }
+                }
+
             val radioId = genderGroup.checkedRadioButtonId
             if (radioId != -1) {
                 session.setGender(view.findViewById<RadioButton>(radioId).text.toString())
             }
+            FirebaseDatabase.getInstance().reference.child("Users")
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .setValue(
+                    UserDTO(
+                        session.getUsername().toString(), editEmail.text.toString(),
+                        session.getGender().toString(), editAddress.text.toString(), ""
+                    )
+                )
             val fm = requireActivity().supportFragmentManager
-            fm.popBackStack("FragEditProfile",FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fm.popBackStack()
 //            fm.popBackStack("FragAccount",FragmentManager.POP_BACK_STACK_INCLUSIVE)
             requireActivity().supportFragmentManager.beginTransaction().remove(this)
                 .add(R.id.framelayout, AccountFragment())
@@ -103,7 +153,48 @@ class EditProfileFragment : Fragment() {
 //                updateUI(null)
                 // [END_EXCLUDE]
             }
+        } else if (requestCode == CHOOSE_IMAGE) {
+            val image: Uri? = data?.data
+            if (data != null) {
+                val uri = getUri(decodeUri(image))
+                path = uri.toString()
+                Picasso.with(requireContext()).load(uri).into(userImage)
+            }
         }
+    }
+
+    private fun getUri(image: Bitmap): Uri {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val path: String = MediaStore.Images.Media.insertImage(
+            requireContext().contentResolver,
+            image,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+
+    }
+
+    @Throws(FileNotFoundException::class)
+    fun decodeUri(uri: Uri?): Bitmap {
+        val requiredSize = 256
+        val c = requireContext()
+        val o: BitmapFactory.Options = BitmapFactory.Options()
+        o.inJustDecodeBounds = true
+        BitmapFactory.decodeStream(c.contentResolver.openInputStream(uri!!), null, o)
+        var width_tmp: Int = o.outWidth
+        var height_tmp: Int = o.outHeight
+        var scale = 1
+        while (true) {
+            if (width_tmp / 2 < requiredSize && height_tmp / 2 < requiredSize) break
+            if (width_tmp > requiredSize) width_tmp /= 2
+            if (height_tmp > requiredSize) height_tmp /= 2
+            scale *= 2
+        }
+        val o2: BitmapFactory.Options = BitmapFactory.Options()
+        o2.inSampleSize = scale
+        return BitmapFactory.decodeStream(c.contentResolver.openInputStream(uri), null, o2)!!
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {

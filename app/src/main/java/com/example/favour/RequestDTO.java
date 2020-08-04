@@ -10,6 +10,8 @@ public class RequestDTO {
     private Integer shop_bor;
     private String items;
 
+    public RequestDTO(){}
+
 
     public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor) {
         this.person_name = person_name;

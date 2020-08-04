@@ -49,4 +49,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="resend_otp"><u>Resend code</u></string>
+    <string name="otp_timer">Time remaining for resend: </string>
+    <string name="borrowing">Borrowing</string>
 </resources>

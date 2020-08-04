@@ -41,6 +41,9 @@ class ViewRequestFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        BackButtonToHome.setOnClickListener(View.OnClickListener {
+            requireActivity().onBackPressed()
+        })
         requestCategory.text = requestDTO.categories
         if (requestDTO.shop_bor != 0) requestType.text = "Borrowing"
         else requestType.text = "Shopping"

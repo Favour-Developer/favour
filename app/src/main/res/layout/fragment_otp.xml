@@ -39,14 +39,31 @@
         android:inputType="number"
         android:padding="10dp" />
 
-    <TextView
-        android:id="@+id/otpResend"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:text="Resend code"
-        android:textColor="@color/blue" />
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/otpResend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="@string/resend_otp"
+            android:layout_weight="1"
+            android:textColor="@color/grey" />
+
+        <Button
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"
+            android:id="@+id/OTPtimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/otp_timer"
+            android:layout_marginRight="30dp"
+            android:textColor="@color/blue" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/otpSignUp"
