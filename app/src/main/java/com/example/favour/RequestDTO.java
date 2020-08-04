@@ -9,11 +9,12 @@ public class RequestDTO {
     private Boolean urgent;
     private Integer shop_bor;
     private String items;
+    private Integer photoOrtext;
 
     public RequestDTO(){}
 
 
-    public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor) {
+    public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor, Integer photoOrText) {
         this.person_name = person_name;
         this.requestID = requestID;
         this.categories = categories;
@@ -21,6 +22,7 @@ public class RequestDTO {
         this.urgent = urgent;
         this.shop_bor = shop_bor;
         this.items = items;
+        this.photoOrtext = photoOrText;
     }
 
     public String getItems() {
@@ -49,5 +51,9 @@ public class RequestDTO {
 
     public Integer getShop_bor() {
         return shop_bor;
+    }
+
+    public Integer getPhotoOrtext() {
+        return photoOrtext;
     }
 }

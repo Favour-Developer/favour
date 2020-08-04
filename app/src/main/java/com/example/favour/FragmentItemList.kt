@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_item_list.*
 
 
@@ -20,6 +23,7 @@ class FragmentItemList : Fragment() {
 
     companion object {
         lateinit var items: String
+        var photoOrText: Int = 0
     }
 
     override fun onCreateView(
@@ -27,7 +31,7 @@ class FragmentItemList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         items = arguments?.getString("Items").toString()
-        // Inflate the layout for this fragment
+        photoOrText = arguments?.getInt("PhotoOrText")!!
         return inflater.inflate(R.layout.fragment_item_list, container, false)
     }
 
@@ -36,7 +40,18 @@ class FragmentItemList : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-       requestList.text = items
+        if (photoOrText == 1) {
+            requestList.visibility = View.GONE
+            val ref = FirebaseStorage.getInstance().reference.child("Requests")
+                .child(items)
+            ref.downloadUrl.addOnSuccessListener { uri ->
+                Picasso.with(requireContext()).load(uri).into(requestImage)
+            }.addOnFailureListener {
+                Toast.makeText(requireContext(), "Coudn't load. Check Intenet!", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        requestList.text = items
 
     }
 

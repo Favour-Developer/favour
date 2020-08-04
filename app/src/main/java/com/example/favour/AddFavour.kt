@@ -1,11 +1,14 @@
 package com.example.favour
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
@@ -17,35 +20,59 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.core.Tag
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_favour.*
+import kotlinx.android.synthetic.main.activity_add_favour.BackButtonToHome
+import kotlinx.android.synthetic.main.view_user_request.*
 import org.w3c.dom.Text
+import java.io.ByteArrayOutputStream
 import java.sql.Types.NULL
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 private const val REQUEST_CODE = 42
 
-@Suppress("PLUGIN_WARNING")
+@Suppress("PLUGIN_WARNING", "DEPRECATION")
 class AddFavour : NavigationDrawer() {
-    var hashmap = HashMap<String, Boolean>()
+    private var hashmap = HashMap<String, Boolean>()
+    private var photoOrtext:Int = 2
+    private var id: Int = 0
+    private lateinit var image: Bitmap
+    private var imageUri: Uri? = null
+    private lateinit var session: Session
+    var text: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_favour)
-        val id = intent.getIntExtra("Type", 0)
-        shop_bor_spinner.setSelection(id)
+        id = intent.getIntExtra("Type", 0)
+        textItemsHeader.text = if (id == 0) "Shopping List" else "Borrowing List"
+        if (id == 1) {
+            selectCategories.visibility = View.GONE
+            OpenCamera.visibility = View.GONE
+            textOR.visibility = View.GONE
+            openEditText.visibility = View.GONE
+            textItemsHeader.visibility = View.VISIBLE
+            textItems.visibility = View.VISIBLE
+            favourType.text = "Borrowing"
+        } else favourType.text = "Shopping"
+
         BackButtonToHome.setOnClickListener {
-//            startActivity(Intent(this, MainActivity::class.java))
             super.onBackPressed()
         }
-        val session = Session(this)
+        session = Session(this)
         PlaceFavourRequest.setOnClickListener {
-            Log.i("HashMap", hashmap.toString())
+
             when {
-                textItems.text.isEmpty() -> {
+                photoOrtext == 2 && textItems.text!!.isEmpty() -> {
                     textItems.error = "This can't be blank."
                 }
-                getCnt() == 0 -> {
+                id == 0 && getCnt() == 0 -> {
                     Toast.makeText(
                         this,
                         "Please select atleast one category.",
@@ -53,18 +80,7 @@ class AddFavour : NavigationDrawer() {
                     ).show()
                 }
                 else -> {
-                    val requestDTO = RequestDTO(
-                        session.getUsername(),
-                        session.getMobile(),
-                        getItemCategories(),
-                        textItems.text.toString(),
-                        6,
-                        urgent_switch.isChecked,
-                        shop_bor_spinner.selectedItemPosition
-                    )
-                    createAndUpload(requestDTO)
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+                    createAndUpload()
                 }
             }
         }
@@ -76,26 +92,100 @@ class AddFavour : NavigationDrawer() {
             sw.text = msg
         }
 
+        openEditText.setOnClickListener {
+            photoOrtext = 2
+            photoListLayout.visibility = View.GONE
+            OpenCamera.visibility = View.GONE
+            textOR.visibility = View.GONE
+            textItems.visibility = View.VISIBLE
+            textItemsHeader.visibility = View.VISIBLE
+        }
+
         OpenCamera.setOnClickListener {
-            Toast.makeText(this, "Image part not added, in process", Toast.LENGTH_SHORT)
-//            setupPermissions()
-//            val TakePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//            startActivityForResult(TakePictureIntent, REQUEST_CODE)
-//            textView5.visibility = View.GONE
-//            OpenCamera.visibility = View.GONE
+            photoOrtext = 1
+//            Toast.makeText(this, "Image part not added, in process", Toast.LENGTH_SHORT).show()
+            setupPermissions()
+            val TakePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(TakePictureIntent, REQUEST_CODE)
+            textOR.visibility = View.GONE
+            openEditText.visibility = View.GONE
+            OpenCamera.visibility = View.GONE
         }
         CrossButton.setOnClickListener {
-            textView5.visibility = View.VISIBLE
             OpenCamera.visibility = View.VISIBLE
-            CrossButton.visibility = View.GONE
-            imageView.visibility = View.GONE
-
+            photoListLayout.visibility = View.GONE
+            textOR.visibility = View.VISIBLE
+            openEditText.visibility = View.VISIBLE
         }
     }
 
-    private fun createAndUpload(requestDTO: RequestDTO) {
+    private fun createAndUpload() {
+
+        if (photoOrtext == 2) {
+            text = textItems.text.toString()
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            uploadImage()
+        }
+        val requestDTO = RequestDTO(
+            session.getUsername(),
+            session.getMobile(),
+            getItemCategories(),
+            text,
+            6,
+            urgent_switch.isChecked,
+            id,
+            photoOrtext
+        )
         val database = FirebaseDatabase.getInstance().reference
         database.child("requests").push().setValue(requestDTO)
+    }
+
+    private fun uploadImage() {
+        text = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.US
+        ).format(
+            Date()
+        )
+        val ref = FirebaseStorage.getInstance().reference.child("Requests")
+            .child(text)
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Uploading Image ...")
+        progressDialog.show()
+
+        val bitmap = image
+
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val dat = baos.toByteArray()
+        val uploadTask = ref.putBytes(dat)
+        uploadTask.addOnFailureListener { exception ->
+            Log.d("Error", exception.toString())
+            progressDialog.dismiss()
+        }.addOnSuccessListener {
+            progressDialog.dismiss()
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref.downloadUrl
+            }
+        }.addOnCompleteListener { it ->
+            if (it.isSuccessful) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+        }
+            .addOnProgressListener { taskSnapshot ->
+                val progress =
+                    (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+                progressDialog.setMessage("Uploaded: " + progress.toInt() + "%...")
+            }
     }
 
     private fun getItemCategories(): String? {
@@ -109,9 +199,9 @@ class AddFavour : NavigationDrawer() {
         for ((i, j) in hashmap) {
 
             if (j) {
-                if (count == 0) s += i
+                s += if (count == 0) i
                 else {
-                    s += ", $i"
+                    ", $i"
                 }
                 count++
 
@@ -141,7 +231,7 @@ class AddFavour : NavigationDrawer() {
         }
     }
 
-    fun makeRequest() {
+    private fun makeRequest() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(android.Manifest.permission.CAMERA),
@@ -165,15 +255,17 @@ class AddFavour : NavigationDrawer() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) =
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val TakenImage = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(TakenImage)
-            CrossButton.visibility = View.VISIBLE
-            imageView.visibility = View.VISIBLE
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+            if (data != null) {
+                imageUri = data.data
+                image = data.extras?.get("data") as Bitmap
+                photoList.setImageBitmap(image)
+                photoListLayout.visibility = View.VISIBLE
+            }
         }
+    }
 
     @Suppress("DEPRECATION")
     fun change(view: View) {
@@ -181,7 +273,7 @@ class AddFavour : NavigationDrawer() {
         if (btn.textColors.defaultColor == resources.getColor(R.color.black)) {
             btn.setBackgroundResource(R.drawable.tag_selected)
             btn.setTextColor(resources.getColor(R.color.white))
-            hashmap.put(btn.text.toString(), true)
+            hashmap[btn.text.toString()] = true
         } else {
             btn.setBackgroundResource(R.drawable.border)
             btn.setTextColor(resources.getColor(R.color.black))

@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 
 
+@Suppress("DEPRECATION")
 class EditProfileFragment : Fragment() {
 
     private val CHOOSE_IMAGE = 1
@@ -173,7 +174,6 @@ class EditProfileFragment : Fragment() {
             null
         )
         return Uri.parse(path)
-
     }
 
     @Throws(FileNotFoundException::class)

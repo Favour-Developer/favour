@@ -7,303 +7,280 @@
     android:layout_height="match_parent"
     tools:context=".AddFavour">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/BackButtonToHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/back_button"
+            android:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:text="Generate Favour Request"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="24dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/urgent_request"
+                    android:textColor="@color/black" />
+
+                <Switch
+                    android:id="@+id/urgent_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:checked="false"
+                    android:theme="@style/switch1" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favour_type"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/favourType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Shopping"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/selectCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Item Category Tags"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/GroceriesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:onClick="change"
+                        android:padding="8dp"
+                        android:selectAllOnFocus="false"
+                        android:text="Groceries"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+
+                    <Button
+                        android:id="@+id/VegetablesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:onClick="change"
+                        android:padding="8dp"
+                        android:text="Vegetables"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textIsSelectable="true" />
+
+                    <Button
+                        android:id="@+id/PersonalCareButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:linksClickable="false"
+                        android:onClick="change"
+                        android:padding="8dp"
+                        android:text="Personal Care"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/StationaryButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:onClick="change"
+                        android:padding="8dp"
+                        android:text="Stationary"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+
+                    <Button
+                        android:id="@+id/MedicineButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:onClick="change"
+                        android:padding="8dp"
+                        android:text="Medicine"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+
+                    <Button
+                        android:id="@+id/HardwareButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:onClick="change"
+                        android:padding="8dp"
+                        android:text="Hardware"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
 
             <Button
-                android:id="@+id/MedicineButton"
-                android:layout_width="110dp"
+                android:id="@+id/OpenCamera"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/border"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/curveborder"
                 android:gravity="center"
-                android:onClick="change"
-                android:padding="3dp"
-                android:text="Medicine"
+                android:padding="10dp"
+                android:text="Upload photograph of the shopping list"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toStartOf="@+id/HardwareButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/StationaryButton"
-                app:layout_constraintTop_toBottomOf="@+id/VegetablesButton" />
+                android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/HardwareButton"
-                android:layout_width="110dp"
+            <RelativeLayout
+                android:id="@+id/photoListLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="22dp"
-                android:background="@drawable/border"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
                 android:gravity="center"
-                android:onClick="change"
-                android:padding="3dp"
-                android:text="Hardware"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/PersonalCareButton" />
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/StationaryButton"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/border"
-                android:gravity="center"
-                android:onClick="change"
-                android:padding="3dp"
-                android:text="Stationary"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/GroceriesButton" />
+                <ImageView
+                    android:id="@+id/photoList"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/BackButtonToHome"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@color/white"
-                android:src="@drawable/back_button"
-                android:textAllCaps="false"
-                android:tint="@color/black"
-                app:backgroundTint="@android:color/transparent"
-                app:borderWidth="0dp"
-                app:elevation="0dp"
-                app:hoveredFocusedTranslationZ="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbarLayout"
-                app:maxImageSize="24dp"
-                app:pressedTranslationZ="0dp" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/CrossButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/remove_image" />
+
+            </RelativeLayout>
+
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textOR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="14dp"
-                android:text="@string/favour_type"
+                android:layout_gravity="center_horizontal"
+                android:text="OR"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/openEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/curveborder"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Type the shopping list"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textItemsHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shopping List"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                android:visibility="gone" />
 
-            <Spinner
-                android:id="@+id/shop_bor_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="12dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:background="@drawable/border"
-                android:entries="@array/TypeRequest"
-                android:spinnerMode="dropdown"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="16dp"
-                android:text="Select Item Category Tags"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
-                android:text="Generate Favour Request"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/BackButtonToHome"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText,UnknownId" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/urgent_request"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-            <Button
-                android:id="@+id/GroceriesButton"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/border"
-                android:gravity="center"
-                android:onClick="change"
-                android:padding="3dp"
-                android:selectAllOnFocus="false"
-                android:text="Groceries"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-
-            <Button
-                android:id="@+id/VegetablesButton"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/border"
-                android:gravity="center"
-                android:onClick="change"
-                android:padding="3dp"
-                android:text="Vegetables"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textIsSelectable="true"
-                app:layout_constraintEnd_toStartOf="@+id/PersonalCareButton"
-                app:layout_constraintStart_toEndOf="@+id/GroceriesButton"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-            <Button
-                android:id="@+id/PersonalCareButton"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="22dp"
-                android:background="@drawable/border"
-                android:gravity="center"
-                android:linksClickable="false"
-                android:onClick="change"
-                android:padding="3dp"
-                android:text="Personal Care"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textItems"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="22dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="24dp"
                 android:background="@drawable/border"
                 android:gravity="start|top"
                 android:hint="@string/editTextTextMultiLine"
                 android:inputType="textMultiLine"
                 android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                android:visibility="gone" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="top" />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="22dp"
-                android:text="OR"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textItems" />
-
-            <TextView
-                android:id="@+id/OpenCamera"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="22dp"
-                android:background="@drawable/curveborder"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Upload photograph of the shopping list"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-            <Switch
-                android:id="@+id/urgent_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:checked="false"
-                android:theme="@style/switch1"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="22dp"
-                android:text="Shopping List"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/MedicineButton" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="22dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView5"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/CrossButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="12dp"
-                android:clickable="true"
-                android:visibility="gone"
-                app:backgroundTint="@android:color/transparent"
-                app:borderWidth="0dp"
-                app:elevation="0dp"
-                app:hoveredFocusedTranslationZ="0dp"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                app:maxImageSize="80dp"
-                app:pressedTranslationZ="0dp"
-                app:srcCompat="@android:drawable/btn_dialog" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 
     <Button

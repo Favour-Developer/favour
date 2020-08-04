@@ -132,7 +132,7 @@ class HelpFragment : Fragment() {
         uploadTask.addOnFailureListener { exception ->
             Log.d("Error", exception.toString())
             progressDialog.dismiss()
-        }.addOnSuccessListener { taskSnapshot ->
+        }.addOnSuccessListener {
             progressDialog.dismiss()
             uploadTask.continueWithTask { task ->
                 if (!task.isSuccessful) {
@@ -145,7 +145,6 @@ class HelpFragment : Fragment() {
         }.addOnCompleteListener { it ->
             if (it.isSuccessful) {
                 requireActivity().onBackPressed()
-
             } else
                 Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
         }

@@ -51,6 +51,7 @@ class ViewRequestFragment : Fragment() {
 
         if (!requestDTO.urgent) requestUrgent.visibility = View.GONE
         val bundle = Bundle()
+        bundle.putInt("PhotoOrText", requestDTO.photoOrtext)
         bundle.putString("Items", requestDTO.items)
         val frag = FragmentItemList()
         frag.arguments = bundle

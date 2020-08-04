@@ -16,7 +16,7 @@
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             android:name=".ProcessFlowActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".AddFavour" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".SplashScreen" />
         <activity
             android:name=".NavigationDrawer"
             android:configChanges="orientation|screenSize|keyboardHidden" />
