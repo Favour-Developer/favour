@@ -1,5 +1,6 @@
 package com.example.favour
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,9 @@ class FrontSigninFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+//        takeMeLogin.setOnClickListener(View.OnClickListener {
+//            startActivity(Intent(requireContext(),Login::class.java))
+//        })
         signUp.setOnClickListener(View.OnClickListener {
             if (CheckerMatcher().checkEmptyNamePhone(signInName, mob_number)) {
                 val bundle = Bundle()

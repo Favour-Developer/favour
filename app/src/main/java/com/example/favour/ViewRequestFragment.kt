@@ -53,6 +53,7 @@ class ViewRequestFragment : Fragment() {
         val bundle = Bundle()
         bundle.putInt("PhotoOrText", requestDTO.photoOrtext)
         bundle.putString("Items", requestDTO.items)
+        bundle.putString("requestId", requestDTO.requestID)
         val frag = FragmentItemList()
         frag.arguments = bundle
 
@@ -62,7 +63,11 @@ class ViewRequestFragment : Fragment() {
         val pFrag = ProcessRequestFragment()
         pFrag.arguments = bundle
 
+        if (requestDTO.requestID.take(10) == Session(requireContext()).getMobile()) acceptRequest.visibility =
+            View.GONE
+
         acceptRequest.setOnClickListener(View.OnClickListener {
+
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.containerProcess, pFrag)
                 .addToBackStack("ViewRequestFrag").commit()

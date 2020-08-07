@@ -10,11 +10,12 @@ public class RequestDTO {
     private Integer shop_bor;
     private String items;
     private Integer photoOrtext;
+    private Boolean isCompleted;
 
     public RequestDTO(){}
 
 
-    public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor, Integer photoOrText) {
+    public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor, Integer photoOrText, Boolean isCompleted) {
         this.person_name = person_name;
         this.requestID = requestID;
         this.categories = categories;
@@ -23,6 +24,7 @@ public class RequestDTO {
         this.shop_bor = shop_bor;
         this.items = items;
         this.photoOrtext = photoOrText;
+        this.isCompleted = isCompleted;
     }
 
     public String getItems() {

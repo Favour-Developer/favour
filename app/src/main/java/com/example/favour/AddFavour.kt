@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.favour
 
 import android.app.Activity
@@ -5,33 +7,21 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Switch
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.core.Tag
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_favour.*
 import kotlinx.android.synthetic.main.activity_add_favour.BackButtonToHome
-import kotlinx.android.synthetic.main.view_user_request.*
-import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
-import java.sql.Types.NULL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -41,12 +31,13 @@ private const val REQUEST_CODE = 42
 @Suppress("PLUGIN_WARNING", "DEPRECATION")
 class AddFavour : NavigationDrawer() {
     private var hashmap = HashMap<String, Boolean>()
-    private var photoOrtext:Int = 2
+    private var photoOrtext: Int = 2
     private var id: Int = 0
     private lateinit var image: Bitmap
     private var imageUri: Uri? = null
     private lateinit var session: Session
-    var text: String = ""
+    var toc: String = ""
+    var items: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_favour)
@@ -67,7 +58,6 @@ class AddFavour : NavigationDrawer() {
         }
         session = Session(this)
         PlaceFavourRequest.setOnClickListener {
-
             when {
                 photoOrtext == 2 && textItems.text!!.isEmpty() -> {
                     textItems.error = "This can't be blank."
@@ -93,6 +83,7 @@ class AddFavour : NavigationDrawer() {
         }
 
         openEditText.setOnClickListener {
+
             photoOrtext = 2
             photoListLayout.visibility = View.GONE
             OpenCamera.visibility = View.GONE
@@ -102,14 +93,14 @@ class AddFavour : NavigationDrawer() {
         }
 
         OpenCamera.setOnClickListener {
-            photoOrtext = 1
-//            Toast.makeText(this, "Image part not added, in process", Toast.LENGTH_SHORT).show()
-            setupPermissions()
-            val TakePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(TakePictureIntent, REQUEST_CODE)
-            textOR.visibility = View.GONE
-            openEditText.visibility = View.GONE
-            OpenCamera.visibility = View.GONE
+            if (askForPermissions()) {
+                photoOrtext = 1
+                val TakePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(TakePictureIntent, REQUEST_CODE)
+                textOR.visibility = View.GONE
+                openEditText.visibility = View.GONE
+                OpenCamera.visibility = View.GONE
+            }
         }
         CrossButton.setOnClickListener {
             OpenCamera.visibility = View.VISIBLE
@@ -120,9 +111,14 @@ class AddFavour : NavigationDrawer() {
     }
 
     private fun createAndUpload() {
-
+        toc = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.US
+        ).format(
+            Date()
+        )
         if (photoOrtext == 2) {
-            text = textItems.text.toString()
+            items = textItems.text.toString()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
@@ -130,27 +126,22 @@ class AddFavour : NavigationDrawer() {
         }
         val requestDTO = RequestDTO(
             session.getUsername(),
-            session.getMobile(),
+            session.getMobile() + "_" + toc,
             getItemCategories(),
-            text,
+            items,
             6,
             urgent_switch.isChecked,
             id,
-            photoOrtext
+            photoOrtext,
+            false
         )
         val database = FirebaseDatabase.getInstance().reference
         database.child("requests").push().setValue(requestDTO)
     }
 
     private fun uploadImage() {
-        text = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.US
-        ).format(
-            Date()
-        )
         val ref = FirebaseStorage.getInstance().reference.child("Requests")
-            .child(text)
+            .child(session.getMobile() + "_" + toc)
         val progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Uploading Image ...")
         progressDialog.show()
@@ -220,41 +211,6 @@ class AddFavour : NavigationDrawer() {
         return cnt
     }
 
-// CAMERA SETUP
-// https://pranaybhalerao.wordpress.com/2018/02/11/run-time-permission-in-androidkotlin/
-
-    val CAMERA_REQUEST_CODE = 123;
-    fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            makeRequest()
-        }
-    }
-
-    private fun makeRequest() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(android.Manifest.permission.CAMERA),
-            CAMERA_REQUEST_CODE
-        )
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            CAMERA_REQUEST_CODE -> {
-                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -264,7 +220,11 @@ class AddFavour : NavigationDrawer() {
                 photoList.setImageBitmap(image)
                 photoListLayout.visibility = View.VISIBLE
             }
-        }
+        } else if(resultCode == Activity.RESULT_CANCELED){
+            OpenCamera.visibility = View.VISIBLE
+            photoListLayout.visibility = View.GONE
+            textOR.visibility = View.VISIBLE
+            openEditText.visibility = View.VISIBLE        }
     }
 
     @Suppress("DEPRECATION")
@@ -279,6 +239,53 @@ class AddFavour : NavigationDrawer() {
             btn.setTextColor(resources.getColor(R.color.black))
             hashmap.put(btn.text.toString(), false)
 
+        }
+    }
+
+    private fun isPermissionsAllowed(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun askForPermissions(): Boolean {
+        if (!isPermissionsAllowed()) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this as Activity,
+                    android.Manifest.permission.CAMERA
+                )
+            ) {
+                Permssions(this).showPermissionDeniedDialog()
+            } else {
+                ActivityCompat.requestPermissions(
+                    this as Activity,
+                    arrayOf(android.Manifest.permission.CAMERA),
+                    REQUEST_CODE
+                )
+            }
+            return false
+        }
+        return true
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // +
+                    // permission is granted, you can perform your operation here
+                } else {
+                    // permission is denied, you can ask for permission again, if you want
+                    //  askForPermissions()
+                }
+                return
+            }
         }
     }
 }

@@ -1,10 +1,14 @@
 package com.example.favour
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -110,20 +114,5 @@ class MainActivity : NavigationDrawer() {
         shoppingButton.isClickable = false
         isOpen = false
     }
-//
-//    override fun onBackPressed() {
-//        val count = supportFragmentManager.backStackEntryCount
-//        if (count == 0) {
-//            super.onBackPressed()
-//            //additional code
-//        } else {
-//            supportFragmentManager.popBackStack()
-//        }
-//    }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//    }
 
 }

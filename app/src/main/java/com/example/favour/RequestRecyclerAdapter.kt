@@ -34,16 +34,17 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
         if (dataList[position].shop_bor == 0) {
             holder.icon?.setImageResource(R.drawable.shopping)
             holder.shopBor!!.text = "Shopping"
+            holder.categories!!.text = dataList[position].categories
         } else {
             holder.icon?.setImageResource(R.drawable.borrowing)
             holder.shopBor!!.text = "Borrowing"
+            holder.categories!!.text = dataList[position].items
         }
 
         holder.personName!!.text = dataList[position].person_name
         val s = StringBuilder()
         s.append(dataList[position].timer).append(" hour")
         holder.timer?.text = s
-        holder.categories!!.text = dataList[position].categories
         if (dataList[position].urgent == false) holder.urgent!!.visibility = View.GONE
     }
 

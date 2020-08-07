@@ -36,6 +36,7 @@ class EditProfileFragment : Fragment() {
     private val CHOOSE_IMAGE = 1
     private lateinit var session: Session
     private var path: String = ""
+    lateinit var uri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,11 +86,12 @@ class EditProfileFragment : Fragment() {
         })
 
         update_bio.setOnClickListener(View.OnClickListener {
-            if(path!="") session.setPhotoUrl(path)
+            if (path != "") session.setPhotoUrl(path)
             session.setAddress(editAddress.text.toString())
             session.setEmail(editEmail.text.toString())
 
             val storageReference: StorageReference = FirebaseStorage.getInstance().reference
+                .child("Profile_photos")
                 .child(FirebaseAuth.getInstance().uid.toString())
             storageReference.putFile(Uri.parse(path))
                 .continueWithTask { task ->
@@ -98,14 +100,14 @@ class EditProfileFragment : Fragment() {
                             throw it
                         }
                     }
-                   storageReference.downloadUrl
+                    storageReference.downloadUrl
                 }
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val downloadUri = task.result
-                        Log.d("URL",downloadUri.toString())
+                        Log.d("URL", downloadUri.toString())
                     } else {
-                        Log.d("URL","Failed")
+                        Log.d("URL", "Failed")
                     }
                 }
 
@@ -157,7 +159,7 @@ class EditProfileFragment : Fragment() {
         } else if (requestCode == CHOOSE_IMAGE) {
             val image: Uri? = data?.data
             if (data != null) {
-                val uri = getUri(decodeUri(image))
+                uri = getUri(decodeUri(image))
                 path = uri.toString()
                 Picasso.with(requireContext()).load(uri).into(userImage)
             }
@@ -210,6 +212,13 @@ class EditProfileFragment : Fragment() {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     editEmail.setText(user!!.email)
+                    uri = user.photoUrl!!
+                    path = uri.toString()
+                    val temp = path.takeLast(5)
+                    path = path.substring(0,path.length - 5) + "s256-c"
+                    Picasso.with(requireContext()).load(path).into(userImage)
+
+                    session.setPhotoUrl(path)
 //                    DownloadandSaveImage(requireContext()).execute(user.photoUrl.toString())
 //                    userImage.setImageURI(user.photoUrl)
                     Log.d("ImageURL", user.photoUrl.toString())

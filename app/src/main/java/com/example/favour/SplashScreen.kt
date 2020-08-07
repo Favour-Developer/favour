@@ -15,10 +15,13 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
         val session = Session(this)
         Handler().postDelayed(Runnable {
-            if (session.getLoginState()!! && session.getSignUpState()!!) {
+            if (session.getFirstLaunch()!!) startActivity(Intent(this, OnBoarding::class.java))
+            else if (session.getLoginState()!! && session.getSignUpState()!!) {
                 startActivity(Intent(this, MainActivity::class.java))
             } else if
-            (!session.getLoginState()!! && !session.getSignUpState()!!) startActivity(Intent(this, SignUp::class.java))
+                           (!session.getLoginState()!! && !session.getSignUpState()!!) startActivity(
+                Intent(this, SignUp::class.java)
+            )
             else
                 startActivity(Intent(this, Login::class.java))
             finish()

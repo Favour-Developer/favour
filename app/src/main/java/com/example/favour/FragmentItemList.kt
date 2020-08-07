@@ -24,6 +24,7 @@ class FragmentItemList : Fragment() {
     companion object {
         lateinit var items: String
         var photoOrText: Int = 0
+        lateinit var requestId: String
     }
 
     override fun onCreateView(
@@ -32,6 +33,7 @@ class FragmentItemList : Fragment() {
     ): View? {
         items = arguments?.getString("Items").toString()
         photoOrText = arguments?.getInt("PhotoOrText")!!
+        requestId = arguments?.getString("requestId").toString()
         return inflater.inflate(R.layout.fragment_item_list, container, false)
     }
 
@@ -43,15 +45,17 @@ class FragmentItemList : Fragment() {
         if (photoOrText == 1) {
             requestList.visibility = View.GONE
             val ref = FirebaseStorage.getInstance().reference.child("Requests")
-                .child(items)
+                .child(requestId)
             ref.downloadUrl.addOnSuccessListener { uri ->
                 Picasso.with(requireContext()).load(uri).into(requestImage)
             }.addOnFailureListener {
                 Toast.makeText(requireContext(), "Coudn't load. Check Intenet!", Toast.LENGTH_SHORT)
                     .show()
             }
+        } else {
+            requestList.text = items
+            requestImage.visibility = View.GONE
         }
-        requestList.text = items
 
     }
 

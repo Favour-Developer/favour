@@ -50,8 +50,8 @@ class MyRequestFragment : Fragment() {
                 data.clear()
                 for(snap in snapshot.children){
                     val requestDTO = snap.getValue(RequestDTO::class.java)
-                    if(requestDTO?.requestID == Session(requireContext()).getMobile())
-                        data.add(0,requestDTO!!)
+                    if(requestDTO?.requestID!!.take(10) == Session(requireContext()).getMobile())
+                        data.add(0,requestDTO)
                 }
                 if(data.size > 0) blank.visibility = View.GONE
                 adapter = RequestRecyclerAdapter(requireContext(), data)

@@ -24,6 +24,7 @@ class Session() {
     val MOBILE = "Mobile_Number"
     val GENDER = "GENDER"
     val PHOTOURL = "PHOTO_URL"
+    val IS_FIRST_LAUNCH = "IsFirstLaunch"
 
 
 
@@ -106,6 +107,14 @@ class Session() {
 
     fun getVerifiedState(): Boolean? {
         return pref.getBoolean(IS_MOBILE_VERIFIED,false)
+    }
+
+    fun setFirstLaunch(b: Boolean) {
+        editor.putBoolean(IS_FIRST_LAUNCH, b).apply()
+    }
+
+    fun getFirstLaunch(): Boolean? {
+        return pref.getBoolean(IS_FIRST_LAUNCH,true)
     }
 
 

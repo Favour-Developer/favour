@@ -17,9 +17,9 @@
         <item>Large</item>
     </string-array>
     <string name="generate_favour_request">Generate Favour Request</string>
-    <string name="urgent_request">Urgent Request</string>
+    <string name="urgent_request">Urgent Request?</string>
     <string name="place_favour_request">Place Favour Request</string>
-    <string name="favour_type">Favour Type</string>
+    <string name="favour_type">Favour Type:</string>
     <string name="item_category">Item Category</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="editTextTextMultiLine">1. Enter Item and Quantity\n2. Enter Item and Quantity\n</string>

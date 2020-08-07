@@ -53,6 +53,11 @@ class HelpFragment : Fragment() {
         BackButtonToHome.setOnClickListener(View.OnClickListener {
             requireActivity().onBackPressed()
         })
+        LaunchOnBoarding.setOnClickListener(View.OnClickListener {
+
+            startActivity(Intent(requireContext(), OnBoarding::class.java))
+
+        })
         selectImage.setOnClickListener(View.OnClickListener {
             val intent = Intent(
                 Intent.ACTION_PICK,
@@ -71,15 +76,15 @@ class HelpFragment : Fragment() {
             if (!TextUtils.isEmpty(issueText.text)) {
                 val database = FirebaseDatabase.getInstance().reference
                 d = database.child("Issues").child(FirebaseAuth.getInstance().uid.toString()).push()
-                d.setValue(
-                    FirebaseAuth.getInstance().uid + "-" + SimpleDateFormat(
+                d.child("Creation_time").setValue(
+                    SimpleDateFormat(
                         "yyyyMMdd_HHmmss",
                         Locale.US
                     ).format(
                         Date()
                     )
                 )
-                d.child("issueText").setValue(imageLink)
+                d.child("issueText").setValue(issueText.text.toString())
                 if (image != null) {
                     report()
                 } else requireActivity().onBackPressed()
@@ -112,6 +117,8 @@ class HelpFragment : Fragment() {
         ).format(
             Date()
         )
+        d.child("issueURL").setValue(imageLink)
+
         val ref = FirebaseStorage.getInstance().reference.child("Issues")
             .child(FirebaseAuth.getInstance().uid.toString()).child(imageLink)
         val progressDialog = ProgressDialog(requireContext())
