@@ -6,10 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_onboarding1.*
+import kotlinx.android.synthetic.main.fragment_favour_completed.*
 
 
-class FragmentOnboarding3 : Fragment() {
+class FragmentFavourCompleted : Fragment() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,19 +22,15 @@ class FragmentOnboarding3 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_onboarding3, container, false)
+        return inflater.inflate(R.layout.fragment_favour_completed, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        BackFragment.setOnClickListener(View.OnClickListener {
-            requireActivity().onBackPressed()
-        })
-        next.setOnClickListener(View.OnClickListener {
-            Session(requireContext()).setFirstLaunch(false)
-            startActivity(Intent(requireContext(), SignUp::class.java))
+        favourCompleted.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(context, MainActivity::class.java))
             requireActivity().finish()
         })
     }
+
 }

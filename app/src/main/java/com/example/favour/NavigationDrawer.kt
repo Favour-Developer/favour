@@ -54,11 +54,12 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
             R.string.navigation_drawer_close
         )
         setSupportActionBar(toolbar)
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setHomeButtonEnabled(true)
+
 
 //        t.setHomeAsUpIndicator(R.drawable.key)
         drawerLayout.addDrawerListener(t)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+//        actionBar?.setHomeButtonEnabled(true)
         t.syncState()
         navView.setNavigationItemSelectedListener(this)
 
@@ -72,13 +73,19 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
                 "Rankings part in progress",
                 Toast.LENGTH_SHORT
             ).show()
-            R.id.nav_fCompleted -> Toast.makeText(this, "In progress", Toast.LENGTH_SHORT).show()
+            R.id.nav_fCompleted -> openCompleted()
             R.id.nav_fPoints -> Toast.makeText(this, "In progress", Toast.LENGTH_SHORT).show()
             R.id.nav_logout -> logoutdialog()
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
+    private fun openCompleted() {
+        drawerLayout.closeDrawer(GravityCompat.START)
+        frameLayout.removeAllViews()
+        supportFragmentManager.beginTransaction().add(R.id.framelayout, CompletedFavoursFragment())
+            .addToBackStack("FragCompleted").commit()    }
 
     fun openCloseNavigationDrawer(view: View) {
         drawerLayout.openDrawer(GravityCompat.START)
@@ -97,10 +104,17 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
             .addToBackStack("fragHelp").commit()
     }
 
+    fun openNotification(view: View) {
+        frameLayout.removeAllViews()
+        supportFragmentManager.beginTransaction().add(R.id.framelayout, FragmentNotification())
+            .addToBackStack("fragNotification").commit()
+    }
+
 
     private fun logoutdialog() {
         val alert: Any = AlertDialog.Builder(this)
             .setTitle("Logout")
+            .setMessage("Are you sure you want to logout ?")
             .setPositiveButton(
                 "Yes"
             ) { _, _ ->

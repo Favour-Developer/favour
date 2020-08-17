@@ -14,7 +14,8 @@
         android:gravity="center"
         android:text="Don't worry. Keep Checking. We'll get you some Favour Requests!!"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

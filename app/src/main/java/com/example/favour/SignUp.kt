@@ -2,11 +2,7 @@ package com.example.favour
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_sign_up.*
 
 
 class SignUp : AppCompatActivity() {
@@ -14,8 +10,12 @@ class SignUp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         val session = Session(this)
-        if (session.getLoginState()!! && session.getSignUpState()!!)
-            startActivity(Intent(this, MainActivity::class.java))
+        if (session.getLoginState()!! || session.getSignUpState()!!) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+
+        }
 //        val fml = findViewById<FrameLayout>(R.id.fml_signin)
         supportFragmentManager.beginTransaction().add(R.id.fml_signin, FrontSigninFragment())
             .addToBackStack("FragSignInFront").commit()

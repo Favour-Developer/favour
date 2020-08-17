@@ -48,8 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:onClick="tologin"
+        android:focusable="true"
         android:text="@string/gotoLogin"
         android:textColor="@color/black" />
 

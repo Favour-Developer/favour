@@ -1,69 +1,75 @@
 package com.example.favour
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_front_signin.*
 
 
+@Suppress("DEPRECATION")
 class Login : AppCompatActivity() {
     private var mAuth: FirebaseAuth? = null
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val session = Session(this)
-//        val progressDialog: ProgressBar? = null
+        takeMeSignUp.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, SignUp::class.java))
+            finish()
+        })
         mAuth = FirebaseAuth.getInstance()
-//        val progressBar = ProgressBar(this)
-        //action on clicking login button
+
         login.setOnClickListener {
             if (!IsOnline().connectedToInternet(applicationContext)) {
                 showDialog()
+                return@setOnClickListener
             }
 
 
             //checking the empty fields
             if (CheckerMatcher().checkEmptyPhonePass(mobileLogin, passLogin)) {
-//                progressDialog.V
+                val progressDialog = ProgressDialog(this)
+                progressDialog.setMessage("Logging in ...")
+                progressDialog.show()
+
                 mAuth!!.signInWithEmailAndPassword(
-                    mobileLogin.text.toString() + "@favour.com" ,
+                    mobileLogin.text.toString() + "@favour.com",
                     passLogin.text.toString()
                 )
                     .addOnCompleteListener(
                         this
                     ) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Success", "signInWithEmail:success")
-                            Toast.makeText(
-                                this, "Authentication Success.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+
 
                             session.setLoginState(true)
+                            session.setSignUpState(true)
                             session.setMobile(mobileLogin.text.toString())
+                            progressDialog.dismiss()
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
 
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(
-                                "Failed",
-                                "signInWithEmail:failure",
-                                task.exception
-                            )
-                            Toast.makeText(
-                                this, "Authentication failed.",
-                                Toast.LENGTH_SHORT
+                            progressDialog.dismiss()
+                            Snackbar.make(
+                                rootLogin, "Authentication failed.",
+                                Snackbar.LENGTH_SHORT
                             ).show()
                         }
 

@@ -4,6 +4,7 @@ package com.example.favour;
 public class RequestDTO {
     private String person_name;
     private String requestID;
+    private String userUid;
     private String categories;
     private Integer timer;
     private Boolean urgent;
@@ -11,19 +12,24 @@ public class RequestDTO {
     private String items;
     private Integer photoOrtext;
     private Boolean isCompleted;
+    private Boolean isProgress;
 
-    public RequestDTO(){}
+
+    public RequestDTO() {
+    }
 
 
-    public RequestDTO(String person_name, String requestID, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor, Integer photoOrText, Boolean isCompleted) {
+    public RequestDTO(String person_name, String requestID, String userUid, String categories, String items, Integer timer, Boolean urgent, Integer shop_bor, Integer photoOrText, Boolean isProgress, Boolean isCompleted) {
         this.person_name = person_name;
         this.requestID = requestID;
+        this.userUid = userUid;
         this.categories = categories;
         this.timer = timer;
         this.urgent = urgent;
         this.shop_bor = shop_bor;
         this.items = items;
         this.photoOrtext = photoOrText;
+        this.isProgress = isProgress;
         this.isCompleted = isCompleted;
     }
 
@@ -37,6 +43,10 @@ public class RequestDTO {
 
     public String getRequestID() {
         return requestID;
+    }
+
+    public String getUserUid() {
+        return userUid;
     }
 
     public String getCategories() {
@@ -57,5 +67,13 @@ public class RequestDTO {
 
     public Integer getPhotoOrtext() {
         return photoOrtext;
+    }
+
+    public Boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public Boolean getIsProgress() {
+        return isProgress;
     }
 }

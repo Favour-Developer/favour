@@ -10,8 +10,9 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import com.example.favour.MainActivity
-import com.example.favour.Practice
+import com.example.favour.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -27,7 +28,18 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 sendNotificationOreo(mRemoteMessage)
             } else sendNotification(mRemoteMessage)
+            val data = Data(
+                user!!,
+                R.mipmap.app_icon,
+                mRemoteMessage.data["body"]!!,
+                mRemoteMessage.data["title"]!!,
+                sented
+            )
+            val database = FirebaseDatabase.getInstance().reference
+            database.child("notifications")
+                .child(FirebaseAuth.getInstance().uid.toString()).push().setValue(data)
         }
+
     }
 
     private fun sendNotification(mRemoteMessage: RemoteMessage) {
@@ -38,7 +50,7 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
 
         val notification = mRemoteMessage.notification
         var j = user!!.replace("[\\D]".toRegex(), "").toInt()
-        val intent = Intent(this, Practice::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         val bundle = Bundle()
         bundle.putString("userId", user)
         intent.putExtras(bundle)
@@ -68,7 +80,7 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
 
         val notification = mRemoteMessage.notification
         var j = user!!.replace("[\\D]".toRegex(), "").toInt()
-        val intent = Intent(this, Practice::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         val bundle = Bundle()
         bundle.putString("userId", user)
         intent.putExtras(bundle)

@@ -57,12 +57,19 @@ class EditProfileFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         session = Session(requireContext())
-        editEmail.setText(session.getEmail())
+        if (session.getEmail() != "Add Email") editEmail.setText(session.getEmail())
         editMobile.text = session.getMobile()
-        editAddress.setText(session.getAddress())
+        if (session.getAddress() != "Add Address") editAddress.setText(session.getAddress())
         if (session.getPhotoUrl() != "") Picasso.with(requireContext()).load(session.getPhotoUrl())
             .into(userImage)
-        genderGroup.clearCheck()
+        genderGroup.check(
+            when {
+                session.getGender() == "Male" -> R.id.male
+                session.getGender() == "Female" -> R.id.female
+                session.getGender() == "Others" -> R.id.others
+                else -> -1
+            }
+        )
 
         changePhoto.setOnClickListener(View.OnClickListener {
             val intent = Intent(
@@ -74,6 +81,7 @@ class EditProfileFragment : Fragment() {
 
 
         // Configure Google Sign In
+        /* Disabling
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -84,6 +92,7 @@ class EditProfileFragment : Fragment() {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, Companion.RC_SIGN_IN)
         })
+         */
 
         update_bio.setOnClickListener(View.OnClickListener {
             if (path != "") session.setPhotoUrl(path)
@@ -120,15 +129,13 @@ class EditProfileFragment : Fragment() {
                 .setValue(
                     UserDTO(
                         session.getUsername().toString(), editEmail.text.toString(),
-                        session.getGender().toString(), editAddress.text.toString(), ""
+                        session.getGender().toString(), editAddress.text.toString(), "",
+                        session.getMobile().toString()
                     )
                 )
-            val fm = requireActivity().supportFragmentManager
-            fm.popBackStack()
-//            fm.popBackStack("FragAccount",FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            requireActivity().supportFragmentManager.beginTransaction().remove(this)
-                .add(R.id.framelayout, AccountFragment())
-                .addToBackStack("FragEditProfile").commit()
+
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
         })
 
     }
@@ -140,7 +147,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+/*Disabling
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -156,7 +163,9 @@ class EditProfileFragment : Fragment() {
 //                updateUI(null)
                 // [END_EXCLUDE]
             }
-        } else if (requestCode == CHOOSE_IMAGE) {
+        } else
+ */
+        if (requestCode == CHOOSE_IMAGE) {
             val image: Uri? = data?.data
             if (data != null) {
                 uri = getUri(decodeUri(image))
@@ -198,7 +207,7 @@ class EditProfileFragment : Fragment() {
         o2.inSampleSize = scale
         return BitmapFactory.decodeStream(c.contentResolver.openInputStream(uri), null, o2)!!
     }
-
+/*Disabling
     private fun firebaseAuthWithGoogle(idToken: String) {
         auth = FirebaseAuth.getInstance()
         // [START_EXCLUDE silent]
@@ -211,11 +220,12 @@ class EditProfileFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
+
                     editEmail.setText(user!!.email)
                     uri = user.photoUrl!!
                     path = uri.toString()
                     val temp = path.takeLast(5)
-                    path = path.substring(0,path.length - 5) + "s256-c"
+                    path = path.substring(0, path.length - 5) + "s220-c"
                     Picasso.with(requireContext()).load(path).into(userImage)
 
                     session.setPhotoUrl(path)
@@ -240,5 +250,7 @@ class EditProfileFragment : Fragment() {
         // [END_EXCLUDE]
 
     }
+
+ */
 
 }

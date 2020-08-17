@@ -1,16 +1,16 @@
 package com.example.favour
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.example.favour.notifications.Token
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : NavigationDrawer() {
@@ -28,6 +28,14 @@ class MainActivity : NavigationDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        updateToken()
+
+        acceptedRequests.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, AcceptedRequest::class.java))
+        })
+
+
         faB_open = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         faB_close = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         faB_clock = AnimationUtils.loadAnimation(this, R.anim.fab_rotate_clock)
@@ -89,6 +97,8 @@ class MainActivity : NavigationDrawer() {
 
     private fun fabMenuOpen() {
         shadowView.visibility = View.VISIBLE
+        shadowView.isClickable = true
+        acceptedRequests.visibility = View.GONE
         borrowingButton.visibility = View.VISIBLE
         borrowing_tv.visibility = View.VISIBLE
         borrowingButton.startAnimation(faB_open)
@@ -102,7 +112,9 @@ class MainActivity : NavigationDrawer() {
     }
 
     private fun fabMenuClose() {
-        shadowView.visibility = View.GONE
+        shadowView.visibility = View.INVISIBLE
+        shadowView.isClickable = false
+        acceptedRequests.visibility = View.VISIBLE
         shoppingButton.visibility = View.INVISIBLE
         shopping_tv.visibility = View.INVISIBLE
         shoppingButton.startAnimation(faB_close)
@@ -113,6 +125,13 @@ class MainActivity : NavigationDrawer() {
         borrowingButton.isClickable = false
         shoppingButton.isClickable = false
         isOpen = false
+    }
+
+    private fun updateToken() {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val ref = FirebaseDatabase.getInstance().reference.child("Tokens")
+        val token = Token(FirebaseInstanceId.getInstance().token!!)
+        ref.child(firebaseUser!!.uid).setValue(token)
     }
 
 }

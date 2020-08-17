@@ -32,14 +32,15 @@ class FrontSigninFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-//        takeMeLogin.setOnClickListener(View.OnClickListener {
-//            startActivity(Intent(requireContext(),Login::class.java))
-//        })
+        takeMeLogin.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(requireContext(), Login::class.java))
+            requireActivity().finish()
+        })
         signUp.setOnClickListener(View.OnClickListener {
             if (CheckerMatcher().checkEmptyNamePhone(signInName, mob_number)) {
                 val bundle = Bundle()
-                bundle.putString("Name",signInName.text.toString())
-                bundle.putString("Mobile",mob_number.text.toString())
+                bundle.putString("Name", signInName.text.toString())
+                bundle.putString("Mobile", mob_number.text.toString())
                 val frag = OtpFragment()
                 frag.arguments = bundle
                 requireActivity().supportFragmentManager.beginTransaction()

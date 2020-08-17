@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".HelpFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <ImageButton
                 android:id="@+id/BackButtonToHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:backgroundTint="@color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/back_button"
                 android:tint="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:text="Help"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -96,16 +99,20 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.autofit.et.lib.AutoFitEditText
             android:id="@+id/issueText"
             android:layout_width="match_parent"
-            android:layout_height="172dp"
+            android:layout_height="match_parent"
             android:layout_margin="30dp"
             android:background="@drawable/border"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="start|top"
             android:hint="Please tell us the issue you are facing"
-            android:inputType="textMultiLine"
-            android:padding="8dp" />
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLength="500"
+            android:padding="8dp"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -154,9 +161,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:background="@color/white"
-                android:visibility="gone"
                 android:clickable="true"
-                android:src="@drawable/remove_image" />
+                android:src="@drawable/remove_image"
+                android:visibility="gone" />
         </LinearLayout>
 
         <Button
@@ -167,8 +174,7 @@
             android:background="@drawable/curveborder"
             android:text="Report Issue"
             android:textAllCaps="false"
-            android:textColor="@color/white"
-          />
+            android:textColor="@color/white" />
 
 
     </LinearLayout>

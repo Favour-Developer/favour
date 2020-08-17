@@ -17,7 +17,7 @@
         <item>Large</item>
     </string-array>
     <string name="generate_favour_request">Generate Favour Request</string>
-    <string name="urgent_request">Urgent Request?</string>
+    <string name="urgent_request">Urgent Request ?</string>
     <string name="place_favour_request">Place Favour Request</string>
     <string name="favour_type">Favour Type:</string>
     <string name="item_category">Item Category</string>
@@ -52,4 +52,8 @@
     <string name="resend_otp"><u>Resend code</u></string>
     <string name="otp_timer">Time remaining for resend: </string>
     <string name="borrowing">Borrowing</string>
+    <string name="favour_category">Favour Category:</string>
+    <string name="shopping">Shopping</string>
+    <string name="urgent">URGENT</string>
+    <string name="gotoSignup">New User? <u> Register Now</u> </string>
 </resources>

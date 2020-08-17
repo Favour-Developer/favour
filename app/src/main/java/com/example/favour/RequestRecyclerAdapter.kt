@@ -45,12 +45,10 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
         val s = StringBuilder()
         s.append(dataList[position].timer).append(" hour")
         holder.timer?.text = s
+        if (dataList[position].isProgress == false) holder.inProgress!!.visibility = View.GONE
         if (dataList[position].urgent == false) holder.urgent!!.visibility = View.GONE
     }
 
-    interface clickListener {
-        fun onClickListener()
-    }
 
     inner class PlaceHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var icon: ImageView? = null
@@ -59,6 +57,7 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
         var timer: TextView? = null
         var shopBor: TextView? = null
         var urgent: TextView? = null
+        var inProgress: TextView? = null
 
         init {
             icon = itemView.findViewById(R.id.request_icon)
@@ -67,9 +66,14 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
             timer = itemView.findViewById(R.id.timer)
             shopBor = itemView.findViewById(R.id.shop_bor)
             urgent = itemView.findViewById(R.id.urgent_request)
+            inProgress = itemView.findViewById(R.id.inProgress)
             itemView.setOnClickListener(View.OnClickListener {
-                val intent = Intent(context, ProcessFlowActivity::class.java)
-                intent.putExtra("Request_Object",Gson().toJson(dataList[adapterPosition]))
+                val intent = if (dataList[adapterPosition].isProgress) {
+                    Intent(context, ApprovalActivity::class.java)
+                } else {
+                    Intent(context, ProcessFlowActivity::class.java)
+                }
+                intent.putExtra("Request_Object", Gson().toJson(dataList[adapterPosition]))
                 context.startActivity(intent)
             })
         }

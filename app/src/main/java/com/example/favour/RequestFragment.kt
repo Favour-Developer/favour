@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_request.*
 class RequestFragment : Fragment() {
     private var data: MutableList<RequestDTO> = ArrayList()
     lateinit var adapter: RequestRecyclerAdapter
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +32,7 @@ class RequestFragment : Fragment() {
 
         return inflater.inflate(R.layout.fragment_request, container, false)
     }
+
     override fun onViewCreated(
         view: View,
         @Nullable savedInstanceState: Bundle?
@@ -41,19 +42,22 @@ class RequestFragment : Fragment() {
     }
 
     private fun populateData() {
-        val database  = FirebaseDatabase.getInstance().reference
-        database.child("requests").addValueEventListener(object: ValueEventListener {
+        val database = FirebaseDatabase.getInstance().reference
+        database.keepSynced(true)
+        database.child("requests").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("Failed to read", error.toException().toString())
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 data.clear()
-                for(snap in snapshot.children){
+                for (snap in snapshot.children) {
                     val requestDTO = snap.getValue(RequestDTO::class.java)
-                    data.add(0,requestDTO!!)
+                    if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid)
+                        data.add(0, requestDTO)
                 }
-                if(data.size > 0) blank.visibility = View.GONE
+                if (data.size > 0) blank.visibility = View.GONE
+                else blank.visibility = View.VISIBLE
                 adapter = RequestRecyclerAdapter(requireContext(), data)
                 recyclerView.adapter = adapter
 

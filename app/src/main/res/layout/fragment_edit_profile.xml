@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:orientation="vertical">
 
@@ -40,11 +40,11 @@
             android:textColor="@color/blue" />
 
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_signIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp" />
+<!--        <com.google.android.gms.common.SignInButton-->
+<!--            android:id="@+id/google_signIn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="20dp" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,15 +106,16 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:text="Address"
+                        android:maxLines="3"
+                        android:singleLine="false"
                         android:textColor="@color/grey" />
 
                     <EditText
                         android:id="@+id/editAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        android:text="c/o Vaishnavi, Finance Colony, Khajpura, Patna - 800014"
+                        android:inputType="textMultiLine"
+                        android:hint="Add Address"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -151,16 +152,19 @@
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/male"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Male" />
 
                         <RadioButton
+                            android:id="@+id/female"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Female" />
 
                         <RadioButton
+                            android:id="@+id/others"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Others" />
@@ -189,7 +193,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:text="Email"
+                        android:hint="Email"
                         android:textColor="@color/grey" />
 
                     <EditText
@@ -212,9 +216,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/curveborder"
             android:text="Update Bio"
             android:textAllCaps="false"

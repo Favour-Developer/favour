@@ -25,6 +25,13 @@ class Session() {
     val GENDER = "GENDER"
     val PHOTOURL = "PHOTO_URL"
     val IS_FIRST_LAUNCH = "IsFirstLaunch"
+    val USERS  = "Users"
+    val CURRENT_PROCESSING_REQUEST = "Current_Processing_Request"
+    val REQUESTS = "requests"
+    val NOTIFICATIONS = "Notifications"
+    val TOKENS = "Tokens"
+    val ISSUES = "Issues"
+
 
 
 
@@ -116,6 +123,7 @@ class Session() {
     fun getFirstLaunch(): Boolean? {
         return pref.getBoolean(IS_FIRST_LAUNCH,true)
     }
+
 
 
 }

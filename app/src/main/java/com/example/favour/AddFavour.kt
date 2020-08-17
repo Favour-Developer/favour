@@ -13,10 +13,12 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ScrollView
 import android.widget.Switch
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_favour.*
@@ -50,12 +52,17 @@ class AddFavour : NavigationDrawer() {
             openEditText.visibility = View.GONE
             textItemsHeader.visibility = View.VISIBLE
             textItems.visibility = View.VISIBLE
-            favourType.text = "Borrowing"
-        } else favourType.text = "Shopping"
+            favourType.text = getString(R.string.borrowing)
+        } else favourType.text = getString(R.string.shopping)
 
         BackButtonToHome.setOnClickListener {
             super.onBackPressed()
         }
+
+        textItemsHeader .setOnClickListener(View.OnClickListener {
+            addFavourScroll.fullScroll(ScrollView.FOCUS_DOWN)
+        })
+
         session = Session(this)
         PlaceFavourRequest.setOnClickListener {
             when {
@@ -76,9 +83,9 @@ class AddFavour : NavigationDrawer() {
         }
 
         val sw = findViewById<Switch>(R.id.urgent_switch)
-        sw.text = "No "
+        sw.text = getString(R.string.no)
         sw?.setOnCheckedChangeListener { _, isChecked ->
-            val msg = if (isChecked) "Yes" else "No "
+            val msg = if (isChecked) getString(R.string.yes) else getString(R.string.no)
             sw.text = msg
         }
 
@@ -95,8 +102,8 @@ class AddFavour : NavigationDrawer() {
         OpenCamera.setOnClickListener {
             if (askForPermissions()) {
                 photoOrtext = 1
-                val TakePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(TakePictureIntent, REQUEST_CODE)
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(takePictureIntent, REQUEST_CODE)
                 textOR.visibility = View.GONE
                 openEditText.visibility = View.GONE
                 OpenCamera.visibility = View.GONE
@@ -119,7 +126,7 @@ class AddFavour : NavigationDrawer() {
         )
         if (photoOrtext == 2) {
             items = textItems.text.toString()
-            startActivity(Intent(this, MainActivity::class.java))
+            onBackPressed()
             finish()
         } else {
             uploadImage()
@@ -127,12 +134,14 @@ class AddFavour : NavigationDrawer() {
         val requestDTO = RequestDTO(
             session.getUsername(),
             session.getMobile() + "_" + toc,
+            FirebaseAuth.getInstance().uid,
             getItemCategories(),
             items,
             6,
             urgent_switch.isChecked,
             id,
             photoOrtext,
+            false,
             false
         )
         val database = FirebaseDatabase.getInstance().reference
@@ -167,7 +176,7 @@ class AddFavour : NavigationDrawer() {
             }
         }.addOnCompleteListener { it ->
             if (it.isSuccessful) {
-                startActivity(Intent(this, MainActivity::class.java))
+                onBackPressed()
                 finish()
             } else
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
@@ -220,11 +229,12 @@ class AddFavour : NavigationDrawer() {
                 photoList.setImageBitmap(image)
                 photoListLayout.visibility = View.VISIBLE
             }
-        } else if(resultCode == Activity.RESULT_CANCELED){
+        } else if (resultCode == Activity.RESULT_CANCELED) {
             OpenCamera.visibility = View.VISIBLE
             photoListLayout.visibility = View.GONE
             textOR.visibility = View.VISIBLE
-            openEditText.visibility = View.VISIBLE        }
+            openEditText.visibility = View.VISIBLE
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -237,7 +247,7 @@ class AddFavour : NavigationDrawer() {
         } else {
             btn.setBackgroundResource(R.drawable.border)
             btn.setTextColor(resources.getColor(R.color.black))
-            hashmap.put(btn.text.toString(), false)
+            hashmap[btn.text.toString()] = false
 
         }
     }

@@ -1,5 +1,6 @@
 package com.example.favour
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,5 +22,10 @@ class ProcessFlowActivity : AppCompatActivity() {
         val frag = ViewRequestFragment()
         frag.arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.containerProcess,frag).commit()
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

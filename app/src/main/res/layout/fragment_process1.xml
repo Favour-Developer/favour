@@ -40,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="#95D585"
+            android:background="@color/buttonUnselected"
             android:baselineAligned="true"
             android:text="Send"
             android:textColor="@color/white" />

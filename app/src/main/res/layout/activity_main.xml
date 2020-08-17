@@ -5,7 +5,6 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -33,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F2FFFFFF"
-        android:visibility="gone" />
+        android:clickable="false"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/shopping_tv"
@@ -58,7 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="150dp"
-        android:elevation="6dp"
         android:src="@drawable/shopping"
         android:visibility="invisible"
         app:backgroundTint="#EEEEEE"
@@ -88,10 +87,21 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="80dp"
-        android:elevation="6dp"
         android:src="@drawable/borrowing"
         android:visibility="invisible"
         app:backgroundTint="#EEEEEE"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/acceptedRequests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/runner"
+        app:backgroundTint="@color/black"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -101,7 +111,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:elevation="6dp"
         android:src="@drawable/add"
         app:backgroundTint="@color/appTheme"
         app:fabSize="auto"

@@ -13,6 +13,8 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.favour.notifications.ApiService
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_process_request.*
 
 class ProcessRequestFragment : Fragment() {
@@ -22,11 +24,21 @@ class ProcessRequestFragment : Fragment() {
 
     }
 
+    companion object {
+        lateinit var requestDTO: RequestDTO
+        lateinit var s: String
+        lateinit var requestID: String
+        private const val REQUEST_CODE = 42
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        s = arguments?.getString("RequestObject")!!
+        requestDTO = Gson().fromJson(s, RequestDTO::class.java)
+        requestID = requestDTO.requestID
         return inflater.inflate(R.layout.fragment_process_request, container, false)
     }
 
@@ -38,13 +50,13 @@ class ProcessRequestFragment : Fragment() {
         val bundle = Bundle()
         bundle.putString("Items", ViewRequestFragment.requestDTO.items)
         bundle.putInt("PhotoOrText", ViewRequestFragment.requestDTO.photoOrtext)
-        bundle.putString("requestId", ViewRequestFragment.requestDTO.requestID)
+        bundle.putString("requestId", requestID)
         call.setOnClickListener(View.OnClickListener {
             if (askForPermissions()) {
                 startActivity(
                     Intent(
                         Intent.ACTION_DIAL,
-                        Uri.parse("tel:" + ViewRequestFragment.requestDTO.requestID.take(10))
+                        Uri.parse("tel:" + requestID.take(10))
                     )
                 )
             }
@@ -53,11 +65,14 @@ class ProcessRequestFragment : Fragment() {
         val frag = FragmentItemList()
         frag.arguments = bundle
 
-        requireActivity().supportFragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
             .add(R.id.itemContainerProcess, frag).commit()
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.processChild, FragmentProcess1()).commit()
+        val frag1 = FragmentProcess1()
+        frag1.arguments = bundle
+
+        childFragmentManager.beginTransaction()
+            .replace(R.id.processChild, frag1).commit()
 
     }
 
@@ -108,9 +123,6 @@ class ProcessRequestFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val REQUEST_CODE = 42
-    }
 
 
 }

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:src="@drawable/app_icon" />
+        android:src="@drawable/favour_icon" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package com.example.favour
 
+import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_front_signin.*
 import kotlinx.android.synthetic.main.fragment_password.*
 
@@ -51,25 +54,28 @@ class PasswordFragment : Fragment() {
         Log.d("Verified", session.getVerifiedState().toString())
         passSigUp.setOnClickListener(View.OnClickListener {
             if (CheckerMatcher().checkPassPass(pass1, pass2)) {
+                val progressDialog = ProgressDialog(requireContext())
+                progressDialog.setMessage("Signing up ...")
+                progressDialog.show()
                 val emailGenerate = "$mobileNum@favour.com"
                 auth.createUserWithEmailAndPassword(emailGenerate, pass2.text.toString())
                     .addOnCompleteListener(requireActivity()) { task ->
                         if (task.isSuccessful) {
-                            Log.d(TAG, "createUserWithEmail:success")
-//                                val user = auth.currentUser
                             session.setVerifiedState(true)
                             session.setLoginState(true)
                             session.setSignUpState(true)
                             session.setMobile(mobileNum)
                             session.setUsername(name)
+                            progressDialog.dismiss()
                             startActivity(Intent(context, MainActivity::class.java))
                             activity?.finish()
                         } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(
-                                requireContext(), "Authentication failed.",
-                                Toast.LENGTH_SHORT
+                            progressDialog.dismiss()
+                            Snackbar.make(
+                                rootSignUp, "SignUp failed.",
+                                Snackbar.LENGTH_SHORT
                             ).show()
+
                         }
                     }
             }
