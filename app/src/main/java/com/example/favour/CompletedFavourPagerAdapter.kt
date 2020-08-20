@@ -13,7 +13,8 @@ class CompletedFavourPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm
     }
 
     override fun getItem(position: Int): Fragment {
-        return HelpFragment()
+        if(position == 0)return CompletedAskedFragment()
+        return CompletedRespondedFragment()
 
     }
 

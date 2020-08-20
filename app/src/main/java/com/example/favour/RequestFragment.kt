@@ -44,26 +44,27 @@ class RequestFragment : Fragment() {
     private fun populateData() {
         val database = FirebaseDatabase.getInstance().reference
         database.keepSynced(true)
-        database.child("requests").addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Failed to read", error.toException().toString())
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                data.clear()
-                for (snap in snapshot.children) {
-                    val requestDTO = snap.getValue(RequestDTO::class.java)
-                    if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid)
-                        data.add(0, requestDTO)
+        database.child(Session(requireContext()).REQUESTS)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Failed to read", error.toException().toString())
                 }
-                if (data.size > 0) blank.visibility = View.GONE
-                else blank.visibility = View.VISIBLE
-                adapter = RequestRecyclerAdapter(requireContext(), data)
-                recyclerView.adapter = adapter
 
-            }
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    data.clear()
+                    for (snap in snapshot.children) {
+                        val requestDTO = snap.getValue(RequestDTO::class.java)
+                        if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid && !requestDTO.isProgress && !requestDTO.isCompleted)
+                            data.add(0, requestDTO)
+                    }
+                    if (data.size > 0) blank.visibility = View.INVISIBLE
+                    else blank.visibility = View.VISIBLE
+                    adapter = RequestRecyclerAdapter(requireContext(), data)
+                    recyclerView.adapter = adapter
 
-        })
+                }
+
+            })
     }
 
 

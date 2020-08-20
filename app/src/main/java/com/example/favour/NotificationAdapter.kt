@@ -52,22 +52,6 @@ class NotificationAdapter(val context: Context, val dataList: MutableList<Data>)
             icon = itemView.findViewById(R.id.userIcon)
             title = itemView.findViewById(R.id.noticeTitle)
             body = itemView.findViewById(R.id.noticeMessage)
-
-            itemView.setOnClickListener(View.OnClickListener {
-                val alert: Any = AlertDialog.Builder(context)
-                .setTitle("Approve")
-                .setMessage("Approve the following user to get your favour done!")
-                .setPositiveButton(
-                    "Yes"
-                ) { dialogInterface, _ ->
-                    dialogInterface.cancel()
-
-                }
-                .setNegativeButton(
-                    "No"
-                ) { dialogInterface, _ -> dialogInterface.cancel() }
-                .show()
-        })
         }
 
     }

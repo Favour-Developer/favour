@@ -7,6 +7,7 @@ import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 
 class ProcessFlowActivity : AppCompatActivity() {
@@ -17,11 +18,14 @@ class ProcessFlowActivity : AppCompatActivity() {
         val requestDTO = Gson().fromJson(s, RequestDTO::class.java)
         setContentView(R.layout.activity_process_flow)
         val bundle = Bundle()
-        bundle.putString("RequestObject",s)
+        bundle.putString("RequestObject", s)
 //        Log.i("Clicked Object",Gson().toJson(requestDTO))
-        val frag = ViewRequestFragment()
+        val frag: Fragment
+
+        frag = if (requestDTO.isProgress && !requestDTO.isCompleted) ProcessRequestFragment()
+        else ViewRequestFragment()
         frag.arguments = bundle
-        supportFragmentManager.beginTransaction().add(R.id.containerProcess,frag).commit()
+        supportFragmentManager.beginTransaction().add(R.id.containerProcess, frag).commit()
     }
 
     override fun onBackPressed() {

@@ -81,7 +81,7 @@ class ViewRequestFragment : Fragment() {
         pFrag.arguments = bundle
 
 
-        if (requestDTO.requestID.take(10) == Session(requireContext()).getMobile()) acceptRequest.visibility =
+        if (requestDTO.userUid == FirebaseAuth.getInstance().uid || requestDTO.isCompleted) acceptRequest.visibility =
             View.GONE
 
 
@@ -106,7 +106,9 @@ class ViewRequestFragment : Fragment() {
                         false,
                         false,
                         false,
-                        false
+                        false,
+                        "",
+                        0
                     )
                     val ref = FirebaseDatabase.getInstance().reference
 

@@ -13,11 +13,10 @@ public class RequestProcessDTO {
     private Boolean isCancelled;
     private Boolean isPurchased;
     private Boolean isDelivered;
+    private String date;
+    private Integer points;
 
-    public RequestProcessDTO() {
-    }
-
-    public RequestProcessDTO(String requestID, String favourerUID, Boolean isAccepted, Integer amount, Boolean isAmountApproved, Boolean isCompleted, Boolean isCancelled, Boolean isPurchased, Boolean isDelivered) {
+    public RequestProcessDTO(String requestID, String favourerUID, Boolean isAccepted, Integer amount, Boolean isAmountApproved, Boolean isCompleted, Boolean isCancelled, Boolean isPurchased, Boolean isDelivered, String date, Integer points) {
         this.requestID = requestID;
         this.favourerUID = favourerUID;
         this.isAccepted = isAccepted;
@@ -27,8 +26,13 @@ public class RequestProcessDTO {
         this.isCancelled = isCancelled;
         this.isPurchased = isPurchased;
         this.isDelivered = isDelivered;
+        this.date = date;
+        this.points = points;
     }
 
+
+    public RequestProcessDTO() {
+    }
 
 
     public void setRequestID(String requestID) {
@@ -102,5 +106,21 @@ public class RequestProcessDTO {
 
     public void setDelivered(Boolean delivered) {
         isDelivered = delivered;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 }

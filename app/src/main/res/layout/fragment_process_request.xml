@@ -8,9 +8,9 @@
     android:orientation="vertical">
 
     <ScrollView
+        android:id="@+id/scrollProcess"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollProcess">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,11 +33,222 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <FrameLayout
-                android:id="@+id/processChild"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <!--            <FrameLayout-->
+            <!--                android:id="@+id/processChild"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content" />-->
 
+            <!-- process1 -->
+            <LinearLayout
+                android:id="@+id/process1Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/EnterAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/enter_the_bill"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/editAmount"
+                        android:layout_width="114dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/border"
+                        android:fitsSystemWindows="true"
+                        android:gravity="center"
+                        android:hint="Amount"
+                        android:inputType="number"
+                        android:maxLength="8"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/SendButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/buttonUnselected"
+                        android:baselineAligned="true"
+                        android:text="Send"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/curveborder"
+                    android:backgroundTint="@color/unselected"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="Purchased The Product"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <!-- process2 -->
+
+            <LinearLayout
+                android:id="@+id/process2Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/amountDisplay"
+                        android:layout_width="114dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:text="540"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#F8CB5F"
+                        android:drawableLeft="@drawable/hourglass"
+                        android:text="Waiting for approval"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black1" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/curveborder"
+                    android:backgroundTint="@color/unselected"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="Purchased The Product"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <!-- process3 -->
+
+            <LinearLayout
+                android:id="@+id/process3Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/DisplayAmount"
+                        android:layout_width="114dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:text="540"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/Green"
+                        android:baselineAligned="true"
+                        android:text="Approved"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/purchased"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/curveborder"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="Purchased The Product"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <!-- process4 -->
+
+            <LinearLayout
+                android:id="@+id/process4Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Address: "
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:text="This is my address bro. Just delivered. Please Deliver."
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/itemDelivered"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/curveborder"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="Items Delivered"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

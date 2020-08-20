@@ -14,6 +14,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_front_signin.*
 import kotlinx.android.synthetic.main.fragment_password.*
@@ -66,6 +67,18 @@ class PasswordFragment : Fragment() {
                             session.setSignUpState(true)
                             session.setMobile(mobileNum)
                             session.setUsername(name)
+                            FirebaseDatabase.getInstance().reference.child("Users")
+                                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                                .setValue(
+                                    UserDTO(
+                                        session.getUsername().toString(),
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        session.getMobile().toString()
+                                    )
+                                )
                             progressDialog.dismiss()
                             startActivity(Intent(context, MainActivity::class.java))
                             activity?.finish()
