@@ -30,7 +30,8 @@
             android:text="Favour"
             android:textColor="@color/black1"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="gotoHome"/>
 
         <LinearLayout
             android:layout_width="0dp"

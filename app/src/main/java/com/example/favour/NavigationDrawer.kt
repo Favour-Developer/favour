@@ -85,7 +85,8 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
         drawerLayout.closeDrawer(GravityCompat.START)
         frameLayout.removeAllViews()
         supportFragmentManager.beginTransaction().add(R.id.framelayout, CompletedFavoursFragment())
-            .addToBackStack("FragCompleted").commit()    }
+            .addToBackStack("FragCompleted").commit()
+    }
 
     fun openCloseNavigationDrawer(view: View) {
         drawerLayout.openDrawer(GravityCompat.START)
@@ -108,6 +109,11 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
         frameLayout.removeAllViews()
         supportFragmentManager.beginTransaction().add(R.id.framelayout, FragmentNotification())
             .addToBackStack("fragNotification").commit()
+    }
+
+    fun gotoHome(view: View) {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
 
@@ -179,6 +185,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (t.onOptionsItemSelected(item)) true else super.onOptionsItemSelected(item)
     }
+
 
 }
 

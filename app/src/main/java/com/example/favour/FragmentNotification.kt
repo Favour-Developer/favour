@@ -38,28 +38,31 @@ class FragmentNotification : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        BackButtonToHome.setOnClickListener(View.OnClickListener {
+            requireActivity().onBackPressed()
+        })
         val database = FirebaseDatabase.getInstance().reference
         database.keepSynced(true)
         database.child("notifications")
-            .child(FirebaseAuth.getInstance().uid.toString()).addValueEventListener (object :
-            ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Failed to read", error.toException().toString())
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                data.clear()
-                for (snap in snapshot.children) {
-                    val notice = snap.getValue(Data::class.java)
-                    data.add(0, notice!!)
+            .child(FirebaseAuth.getInstance().uid.toString()).addValueEventListener(object :
+                ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Failed to read", error.toException().toString())
                 }
-                if(data.size == 0) noNotice.visibility = View.VISIBLE
-                else noNotice.visibility = View.GONE
-                adapter = NotificationAdapter(requireContext(), data)
-                notification_rv.adapter = adapter
-            }
 
-        })
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    data.clear()
+                    for (snap in snapshot.children) {
+                        val notice = snap.getValue(Data::class.java)
+                        data.add(0, notice!!)
+                    }
+                    if (data.size == 0) noNotice.visibility = View.VISIBLE
+                    else noNotice.visibility = View.GONE
+                    adapter = NotificationAdapter(requireContext(), data)
+                    notification_rv.adapter = adapter
+                }
+
+            })
 
     }
 

@@ -7,23 +7,27 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ScrollView
-import android.widget.Switch
 import android.widget.Toast
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_favour.*
-import kotlinx.android.synthetic.main.activity_add_favour.BackButtonToHome
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -33,10 +37,11 @@ private const val REQUEST_CODE = 42
 @Suppress("PLUGIN_WARNING", "DEPRECATION")
 class AddFavour : NavigationDrawer() {
     private var hashmap = HashMap<String, Boolean>()
-    private var photoOrtext: Int = 2
+    private var photoOrtext: Int = 0
     private var id: Int = 0
     private lateinit var image: Bitmap
     private var imageUri: Uri? = null
+    private lateinit var imageFile: File
     private lateinit var session: Session
     var toc: String = ""
     var items: String = ""
@@ -45,6 +50,12 @@ class AddFavour : NavigationDrawer() {
         setContentView(R.layout.activity_add_favour)
         id = intent.getIntExtra("Type", 0)
         textItemsHeader.text = if (id == 0) "Shopping List" else "Borrowing List"
+        toc = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.US
+        ).format(
+            Date()
+        )
         if (id == 1) {
             selectCategories.visibility = View.GONE
             OpenCamera.visibility = View.GONE
@@ -53,19 +64,27 @@ class AddFavour : NavigationDrawer() {
             textItemsHeader.visibility = View.VISIBLE
             textItems.visibility = View.VISIBLE
             favourType.text = getString(R.string.borrowing)
+            photoOrtext = 2
         } else favourType.text = getString(R.string.shopping)
 
         BackButtonToHome.setOnClickListener {
             super.onBackPressed()
         }
 
-        textItemsHeader .setOnClickListener(View.OnClickListener {
-            addFavourScroll.fullScroll(ScrollView.FOCUS_DOWN)
-        })
+//        textItemsHeader.setOnClickListener(View.OnClickListener {
+////            addFavourScroll.fullScroll(ScrollView.FOCUS_DOWN)
+////        })
 
         session = Session(this)
         PlaceFavourRequest.setOnClickListener {
             when {
+                id == 0 && photoOrtext == 0 -> {
+                    Toast.makeText(
+                        this,
+                        "Please select one type of shopping list (Photo list OR text list) ",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 photoOrtext == 2 && textItems.text!!.isEmpty() -> {
                     textItems.error = "This can't be blank."
                 }
@@ -82,7 +101,7 @@ class AddFavour : NavigationDrawer() {
             }
         }
 
-        val sw = findViewById<Switch>(R.id.urgent_switch)
+        val sw = findViewById<SwitchCompat>(R.id.urgent_switch)
         sw.text = getString(R.string.no)
         sw?.setOnCheckedChangeListener { _, isChecked ->
             val msg = if (isChecked) getString(R.string.yes) else getString(R.string.no)
@@ -90,10 +109,8 @@ class AddFavour : NavigationDrawer() {
         }
 
         openEditText.setOnClickListener {
-
             photoOrtext = 2
-            photoListLayout.visibility = View.GONE
-            OpenCamera.visibility = View.GONE
+            openEditText.visibility = View.GONE
             textOR.visibility = View.GONE
             textItems.visibility = View.VISIBLE
             textItemsHeader.visibility = View.VISIBLE
@@ -101,15 +118,28 @@ class AddFavour : NavigationDrawer() {
 
         OpenCamera.setOnClickListener {
             if (askForPermissions()) {
-                photoOrtext = 1
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(takePictureIntent, REQUEST_CODE)
+                textItems.visibility = View.GONE
+                textItemsHeader.visibility = View.GONE
                 textOR.visibility = View.GONE
                 openEditText.visibility = View.GONE
                 OpenCamera.visibility = View.GONE
+                photoOrtext = 1
+                imageFile = File.createTempFile(
+                    "List_$toc",
+                    ".jpg",
+                    getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                )
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                takePictureIntent.putExtra(
+                    MediaStore.EXTRA_OUTPUT,
+                    FileProvider.getUriForFile(this, "com.example.favour.fileprovider", imageFile)
+                )
+//                val out = Environment.getExternalStorageDirectory()
+                startActivityForResult(takePictureIntent, REQUEST_CODE)
             }
         }
         CrossButton.setOnClickListener {
+            photoOrtext = 0
             OpenCamera.visibility = View.VISIBLE
             photoListLayout.visibility = View.GONE
             textOR.visibility = View.VISIBLE
@@ -118,17 +148,13 @@ class AddFavour : NavigationDrawer() {
     }
 
     private fun createAndUpload() {
-        toc = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.US
-        ).format(
-            Date()
-        )
-        if (photoOrtext == 2) {
+
+        if (photoOrtext == 2 || photoOrtext == 0) {
             items = textItems.text.toString()
             onBackPressed()
             finish()
-        } else {
+        }
+        if (photoOrtext == 1) {
             uploadImage()
         }
         val requestDTO = RequestDTO(
@@ -155,10 +181,11 @@ class AddFavour : NavigationDrawer() {
         progressDialog.setTitle("Uploading Image ...")
         progressDialog.show()
 
+
         val bitmap = image
 
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
         val dat = baos.toByteArray()
         val uploadTask = ref.putBytes(dat)
         uploadTask.addOnFailureListener { exception ->
@@ -186,6 +213,27 @@ class AddFavour : NavigationDrawer() {
                     (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
                 progressDialog.setMessage("Uploaded: " + progress.toInt() + "%...")
             }
+    }
+
+    @Throws(IOException::class)
+    private fun rotateImageIfRequired(img: Bitmap, selectedImage: Uri): Bitmap? {
+        val ei = ExifInterface(selectedImage.path)
+        val orientation: Int =
+            ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        return when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(img, 90F)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(img, 180F)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(img, 270F)
+            else -> img
+        }
+    }
+
+    private fun rotateImage(img: Bitmap, degree: Float): Bitmap? {
+        val matrix = Matrix()
+        matrix.postRotate(degree)
+        val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.width, img.height, matrix, true)
+        img.recycle()
+        return rotatedImg
     }
 
     private fun getItemCategories(): String? {
@@ -223,13 +271,16 @@ class AddFavour : NavigationDrawer() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                imageUri = data.data
-                image = data.extras?.get("data") as Bitmap
-                photoList.setImageBitmap(image)
-                photoListLayout.visibility = View.VISIBLE
-            }
+//            if (data != null) {
+//                imageUri = data.data
+//                image = data.extras?.get("data") as Bitmap
+            image = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(imageFile))
+            image = rotateImageIfRequired(image, Uri.fromFile(imageFile))!!
+            photoList.setImageBitmap(image)
+            photoListLayout.visibility = View.VISIBLE
+//            }
         } else if (resultCode == Activity.RESULT_CANCELED) {
+            photoOrtext = 0
             OpenCamera.visibility = View.VISIBLE
             photoListLayout.visibility = View.GONE
             textOR.visibility = View.VISIBLE
@@ -273,6 +324,7 @@ class AddFavour : NavigationDrawer() {
                     arrayOf(android.Manifest.permission.CAMERA),
                     REQUEST_CODE
                 )
+                //return true
             }
             return false
         }

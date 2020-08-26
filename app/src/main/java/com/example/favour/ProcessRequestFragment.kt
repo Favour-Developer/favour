@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
@@ -80,8 +81,8 @@ class ProcessRequestFragment : Fragment() {
             .add(R.id.itemContainerProcess, frag).commit()
 
         if (requestDTO.shop_bor == 1) {
-            itemDelivered.text = "Item Picked Up"
-            process4()
+            itemDelivered.text = "Items Lended"
+            process4(false)
         } else getRequestProcessDTO()
     }
 
@@ -99,8 +100,8 @@ class ProcessRequestFragment : Fragment() {
                 }
                 when {
                     requestProcessDTO.amount == 0 -> process1()
-                    requestProcessDTO.purchased -> process4()
-                    requestProcessDTO.amountApproved -> process3(false)
+                    requestProcessDTO.purchased -> process4(false)
+//                    requestProcessDTO.amountApproved -> process3(false)
                     else -> process2()
                 }
             }
@@ -188,7 +189,7 @@ class ProcessRequestFragment : Fragment() {
 
             if (editAmount.text.isNotEmpty()) {
                 AlertDialog.Builder(requireContext()).setTitle("Amount Confirmation!")
-                    .setMessage("Are you sure, you want to quote ${editAmount.text} as final amount?")
+                    .setMessage("Are you sure, you want to quote INR ${editAmount.text} as final amount?")
                     .setPositiveButton(
                         "Continue",
                         DialogInterface.OnClickListener { dialogInterface, _ ->
@@ -206,6 +207,12 @@ class ProcessRequestFragment : Fragment() {
                                             val m = HashMap<String, Int>()
                                             m["amount"] = editAmount.text.toString().toInt()
                                             i.ref.updateChildren(m as Map<String, Any>)
+                                            Permssions(requireContext()).sendNotifications(
+                                                requestDTO.userUid,
+                                                R.mipmap.app_icon,
+                                                "Confirm the quoted amount to get your favour done!",
+                                                "Amount Approval"
+                                            )
                                             process2()
                                             break
                                         }
@@ -253,7 +260,8 @@ class ProcessRequestFragment : Fragment() {
                 for (i in snapshot.children) {
                     val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
                     if ((requestProcessDTO!!.requestID == requestID) && (requestProcessDTO.amountApproved)) {
-                        process3(true)
+//                        process3(true)
+                        process4(true)
                         break
                     }
 
@@ -263,104 +271,87 @@ class ProcessRequestFragment : Fragment() {
 
     }
 
-    private fun process3(b: Boolean) {
+//    private fun process3(b: Boolean) {
+//        if (b) ref.removeEventListener(listener)
+//        removeAllLayouts()
+//        process3Layout.visibility = View.VISIBLE
+//        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                for (i in snapshot.children) {
+//
+//                    val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
+//                    if (requestProcessDTO!!.requestID == requestID) {
+//                        amount = requestProcessDTO.amount
+//                        amountDisplay.text = amount.toString()
+//                        break
+//                    }
+//
+//                }
+//            }
+//        })
+//        purchased.setOnClickListener(View.OnClickListener {
+//
+//            ref.addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onCancelled(error: DatabaseError) {
+//                }
+//
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    for (i in snapshot.children) {
+//                        val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
+//                        if (requestProcessDTO!!.requestID == requestID && requestProcessDTO.amountApproved) {
+//                            val m = HashMap<String, Boolean>()
+//                            m["purchased"] = true
+//                            i.ref.updateChildren(m as Map<String, Any>)
+//                            break
+//                        }
+//
+//                    }
+//                }
+//            })
+//
+//            process4()
+//        })
+//
+//    }
+
+    private fun process4(b: Boolean) {
         if (b) ref.removeEventListener(listener)
-        removeAllLayouts()
-        process3Layout.visibility = View.VISIBLE
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (i in snapshot.children) {
-
-                    val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
-                    if (requestProcessDTO!!.requestID == requestID) {
-                        amount = requestProcessDTO.amount
-                        amountDisplay.text = amount.toString()
-                        break
-                    }
-
-                }
-            }
-        })
-        purchased.setOnClickListener(View.OnClickListener {
-
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                }
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (i in snapshot.children) {
-                        val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
-                        if (requestProcessDTO!!.requestID == requestID && requestProcessDTO.amountApproved) {
-                            val m = HashMap<String, Boolean>()
-                            m["purchased"] = true
-                            i.ref.updateChildren(m as Map<String, Any>)
-                            break
-                        }
-
-                    }
-                }
-            })
-
-            process4()
-        })
-
-    }
-
-    private fun process4() {
         removeAllLayouts()
         process4Layout.visibility = View.VISIBLE
         itemDelivered.setOnClickListener(View.OnClickListener {
+            Permssions(requireContext()).sendNotifications(
+                requestDTO.userUid,
+                R.mipmap.app_icon,
+                "Items delivered by the user. Please confirm to complete the favour.",
+                "Delivery Confirmation"
+            )
+            Toast.makeText(
+                requireContext(),
+                "Notification sent for delivery approval. You can also call to remind.",
+                Toast.LENGTH_LONG
+            ).show()
 
-            ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
+            listener = ref.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (snap in snapshot.children) {
+                        val r = snap.getValue(RequestProcessDTO::class.java)
+                        if (r!!.requestID == requestDTO.requestID && r.completed) {
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .replace(R.id.containerProcess, FragmentFavourCompleted())
+                                .commit()
+
+                        }
+                    }
                 }
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (i in snapshot.children) {
-                        val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
-                        if (requestProcessDTO!!.requestID == requestID) {
-                            val m = HashMap<String, Boolean>()
-                            val mp = HashMap<String, Int>()
-                            val md = HashMap<String, String>()
-                            m["delivered"] = true
-                            m["completed"] = true
-                            if (requestDTO.shop_bor == 0) mp["points"] = 100
-                            else mp["points"] = 50
-                            md["date"] = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(Date())
-                            i.ref.updateChildren(m as Map<String, Any>)
-                            i.ref.updateChildren(mp as Map<String, Any>)
-                            i.ref.updateChildren(md as Map<String, Any>)
-                            break
-                        }
+                override fun onCancelled(error: DatabaseError) {
 
-                    }
                 }
             })
-            FirebaseDatabase.getInstance().reference.child(Session(requireContext()).REQUESTS)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
 
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        for (i in snapshot.children) {
-                            val temp = i.getValue(RequestDTO::class.java)
-                            if (requestID == temp!!.requestID) {
-                                val m = HashMap<String, Boolean>()
-                                m["isCompleted"] = true
-                                i.ref.updateChildren(m as Map<String, Any>)
-                                break
-                            }
-                        }
-                    }
-                })
-
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.containerProcess, FragmentFavourCompleted())
-                .commit()
 
         })
     }

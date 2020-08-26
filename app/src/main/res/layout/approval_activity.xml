@@ -139,7 +139,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -196,7 +197,9 @@
                         android:paddingRight="20dp"
                         android:text="Approve the Amount"
                         android:textAllCaps="false"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:visibility="gone" />
+
 
                     <Button
                         android:id="@+id/itemDelivered"
@@ -207,10 +210,10 @@
                         android:background="@drawable/curveborder"
                         android:gravity="center"
                         android:padding="15dp"
-                        android:text="Item Picked Up"
+                        android:text="Item Received"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -220,19 +223,31 @@
         </ScrollView>
     </LinearLayout>
 
-    <Button
+    <LinearLayout
         android:id="@+id/call"
+        style="?attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/appTheme"
-        android:drawableStart="@drawable/call"
         android:gravity="center"
-        android:padding="12dp"
-        android:text="Call"
-        android:textColor="#434343"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/call" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="Call"
+            android:textColor="#434343"
+            android:textSize="18sp" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

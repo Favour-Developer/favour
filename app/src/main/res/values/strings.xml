@@ -56,4 +56,5 @@
     <string name="shopping">Shopping</string>
     <string name="urgent">URGENT</string>
     <string name="gotoSignup">New User? <u> Register Now</u> </string>
+    <string name="footer">Made with ❤ Favour</string>
 </resources>

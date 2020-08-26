@@ -55,12 +55,21 @@ class ApprovalActivity : NavigationDrawer() {
         })
 
 
+
+
         ref = FirebaseDatabase.getInstance().reference
 
         if (requestDTO.shop_bor == 0) shoppingApproval()
         else borrowingApproval()
 
+        itemDelivered.setOnClickListener(View.OnClickListener {
+            completeFavour()
+            approvalRoot.removeAllViews()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.approvalRoot, FragmentFavourCompleted())
+                .commit()
 
+        })
     }
 
     private fun fillDetails() {
@@ -71,6 +80,7 @@ class ApprovalActivity : NavigationDrawer() {
         waitingLayout.visibility = View.GONE
         approveAmount.visibility = View.GONE
         itemDelivered.visibility = View.VISIBLE
+
         favourer.text = "Lender"
         ref.child(Session(this).CURRENT_PROCESSING_REQUEST)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -88,58 +98,6 @@ class ApprovalActivity : NavigationDrawer() {
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-        itemDelivered.setOnClickListener(View.OnClickListener {
-
-            ProcessRequestFragment.ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                }
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (i in snapshot.children) {
-                        val requestProcessDTO = i.getValue(RequestProcessDTO::class.java)
-                        if (requestProcessDTO!!.requestID == ProcessRequestFragment.requestID && requestProcessDTO.amountApproved) {
-                            val m = HashMap<String, Boolean>()
-                            val mp = HashMap<String, Int>()
-                            val md = HashMap<String, String>()
-                            m["delivered"] = true
-                            m["completed"] = true
-                            if (requestDTO.shop_bor == 1) mp["points"] = 100
-                            else mp["points"] = 50
-                            md["date"] = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(Date())
-                            i.ref.updateChildren(m as Map<String, Any>)
-                            i.ref.updateChildren(mp as Map<String, Any>)
-                            i.ref.updateChildren(md as Map<String, Any>)
-                            break
-                        }
-
-                    }
-                }
-            })
-            FirebaseDatabase.getInstance().reference.child(Session(this).REQUESTS)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        for (i in snapshot.children) {
-                            val temp = i.getValue(RequestDTO::class.java)
-                            if (ProcessRequestFragment.requestID == temp!!.requestID) {
-                                val m = HashMap<String, Boolean>()
-                                m["isCompleted"] = true
-                                i.ref.updateChildren(m as Map<String, Any>)
-                                break
-                            }
-                        }
-                    }
-                })
-
-            approvalRoot.removeAllViews()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.approvalRoot, FragmentFavourCompleted())
-                .commit()
-
-        })
 
 
     }
@@ -158,11 +116,18 @@ class ApprovalActivity : NavigationDrawer() {
                             getPhone(requestProcessDTO.favourerUID)
                             getFavourerName(requestProcessDTO.favourerUID)
                         }
-                        if (requestProcessDTO.requestID == requestDTO.requestID && requestProcessDTO.amount != 0) {
-                            amountLayout.visibility = View.VISIBLE
-                            quotedAmount.text = requestProcessDTO.amount.toString()
-                            waitingLayout.visibility = View.GONE
-                            approveAmount.setBackgroundColor(resources.getColor(R.color.black))
+                        if (requestProcessDTO.requestID == requestDTO.requestID) {
+                            if (requestProcessDTO.amount != 0 && !requestProcessDTO.amountApproved) {
+                                amountLayout.visibility = View.VISIBLE
+                                quotedAmount.text = requestProcessDTO.amount.toString()
+                                approveAmount.visibility = View.VISIBLE
+                                approveAmount.setBackgroundColor(resources.getColor(R.color.black))
+                            } else if (requestProcessDTO.amountApproved) {
+                                itemDelivered.visibility = View.VISIBLE
+                            } else {
+                                waitingLayout.visibility = View.VISIBLE
+                                approveAmount.visibility = View.VISIBLE
+                            }
                             break
                         }
 
@@ -188,6 +153,8 @@ class ApprovalActivity : NavigationDrawer() {
                                 if (r!!.requestID == requestDTO.requestID) {
                                     val m = HashMap<String, Boolean>()
                                     m["amountApproved"] = true
+                                    approveAmount.visibility = View.GONE
+                                    itemDelivered.visibility = View.VISIBLE
                                     i.ref.updateChildren(m as Map<String, Any>)
                                     break
                                 }
@@ -198,12 +165,57 @@ class ApprovalActivity : NavigationDrawer() {
                     })
 
             }
-            approvalRoot.removeAllViews()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.approvalRoot, FragmentFavourCompleted())
-                .commit()
 
         })
+    }
+
+    private fun completeFavour() {
+
+        ref.child(Session(this).CURRENT_PROCESSING_REQUEST)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (i in snapshot.children) {
+                        val j = i.getValue(RequestProcessDTO::class.java)
+                        if (j!!.requestID == requestDTO.requestID) {
+                            val m = HashMap<String, Boolean>()
+                            val mp = HashMap<String, Int>()
+                            val md = HashMap<String, String>()
+                            m["delivered"] = true
+                            m["completed"] = true
+                            if (requestDTO.shop_bor == 0) mp["points"] = 100
+                            else mp["points"] = 50
+                            md["date"] = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(Date())
+                            i.ref.updateChildren(m as Map<String, Any>)
+                            i.ref.updateChildren(mp as Map<String, Any>)
+                            i.ref.updateChildren(md as Map<String, Any>)
+                            break
+                        }
+
+                    }
+                }
+            })
+        ref.child(Session(this).REQUESTS)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (snap in snapshot.children) {
+                        val r = snap.getValue(RequestDTO::class.java)
+                        if (r!!.requestID == requestDTO.requestID) {
+                            val m = HashMap<String, Boolean>()
+                            m["isCompleted"] = true
+                            snap.ref.updateChildren(m as Map<String, Any>)
+                            break
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
     }
 
     private fun getFavourerName(favourerUID: String?) {

@@ -54,14 +54,13 @@ class AcceptedRequestAdapter(val context: Context, val dataList: MutableList<Req
         var personName: TextView = itemView.findViewById(R.id.requesteeName)
         var categories: TextView = itemView.findViewById(R.id.categories)
         var urgency_status: TextView = itemView.findViewById(R.id.urgency_status)
-        var proceed: Button = itemView.findViewById(R.id.proceed)
         var cancel: Button = itemView.findViewById(R.id.cancel_accepted_request)
         var remind: Button = itemView.findViewById(R.id.set_reminder)
 
 
         init {
 
-            proceed.setOnClickListener(View.OnClickListener {
+            itemView.setOnClickListener(View.OnClickListener {
                 val intent = Intent(context, ProcessFlowActivity::class.java)
                 intent.putExtra("Request_Object", Gson().toJson(dataList[adapterPosition]))
                 context.startActivity(intent)

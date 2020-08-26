@@ -107,7 +107,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -125,14 +125,27 @@
                         android:textSize="18sp" />
 
 
-                    <Button
+                    <LinearLayout
+                        style="?attr/buttonBarButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#F8CB5F"
-                        android:drawableLeft="@drawable/hourglass"
-                        android:text="Waiting for approval"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black1" />
+                        android:layout_marginStart="10dp"
+                        android:background="@color/appTheme"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/call" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center"
+                            android:text="Waiting for approval"
+                            android:textColor="@color/black1" />
+                    </LinearLayout>
                 </LinearLayout>
 
 
@@ -252,19 +265,31 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <LinearLayout
         android:id="@+id/call"
+        style="?attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/appTheme"
-        android:drawableStart="@drawable/call"
         android:gravity="center"
-        android:padding="12dp"
-        android:text="Call"
-        android:textColor="#434343"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/call" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="Call"
+            android:textColor="#434343"
+            android:textSize="18sp" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

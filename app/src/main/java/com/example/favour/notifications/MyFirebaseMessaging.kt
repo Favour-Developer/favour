@@ -1,5 +1,6 @@
 package com.example.favour.notifications
 
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -15,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Suppress("DEPRECATION")
 class MyFirebaseMessaging : FirebaseMessagingService() {
@@ -24,6 +27,8 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         val sented = mRemoteMessage.data["sented"]
         val user = mRemoteMessage.data["user"]
         val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val isScheduled = mRemoteMessage.data["isScheduled"]?.toBoolean()
+
         if (firebaseUser != null && sented == firebaseUser.uid) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 sendNotificationOreo(mRemoteMessage)
@@ -40,7 +45,38 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
                 .child(FirebaseAuth.getInstance().uid.toString()).push().setValue(data)
         }
 
+
+//        if (isScheduled!!) scheduleAlarm(
+//            mRemoteMessage.data["scheduledTime"],
+//            mRemoteMessage.data["title"],
+//            mRemoteMessage.data["body"]
+//        )
+
+
     }
+
+//    private fun scheduleAlarm(time: String?, title: String?, body: String?) {
+//        val alarmMgr = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val alarmIntent =
+//            Intent(applicationContext, RECEIVER::class.java).let { intent ->
+//                intent.putExtra(, title)
+//                intent.putExtra(NOTIFICATION_MESSAGE, message)
+//                PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
+//            }
+//
+//        // Parse Schedule time
+//        val scheduledTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+//            .parse(time)
+//
+//        scheduledTime?.let {
+//            // With set(), it'll set non repeating one time alarm.
+//            alarmMgr.set(
+//                AlarmManager.RTC_WAKEUP,
+//                it.time,
+//                alarmIntent
+//            )
+//        }
+//    }
 
     private fun sendNotification(mRemoteMessage: RemoteMessage) {
         val user = mRemoteMessage.data["user"]
@@ -59,7 +95,9 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         val defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
-            .setSmallIcon(icon!!.toInt()).setContentTitle(title).setContentText(body)
+            .setSmallIcon(icon!!.toInt()).setContentTitle(title)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setContentText(body)
             .setAutoCancel(true)
             .setSound(defaultSound)
             .setContentIntent(pendingIntent)

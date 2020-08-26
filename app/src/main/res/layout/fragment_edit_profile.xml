@@ -202,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:singleLine="true"
-                        android:text="guptaritik97@gmail.com"
+                        android:hint="Add Email"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 

@@ -32,7 +32,6 @@ class ViewRequestFragment : Fragment() {
 
     companion object {
         lateinit var requestDTO: RequestDTO
-        lateinit var apiService: ApiService
         lateinit var s: String
     }
 
@@ -43,8 +42,7 @@ class ViewRequestFragment : Fragment() {
         // Inflate the layout for this fragment
         s = arguments?.getString("RequestObject")!!
         requestDTO = Gson().fromJson(s, RequestDTO::class.java)
-        apiService =
-            Client.Client.getClient("https://fcm.googleapis.com/")!!.create(ApiService::class.java)
+
         return inflater.inflate(R.layout.fragment_view_request, container, false)
     }
 
@@ -89,7 +87,7 @@ class ViewRequestFragment : Fragment() {
             AlertDialog.Builder(requireContext()).setTitle("Confirmation")
                 .setMessage("Continue to accept the current Favour request?")
                 .setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, _ ->
-                    sendNotifications(
+                    Permssions(requireContext()).sendNotifications(
                         requestDTO.userUid,
                         R.mipmap.app_icon,
                         Session(requireContext()).getUsername() + " offered to favour you. Make sure to stay active for updates",
@@ -141,52 +139,6 @@ class ViewRequestFragment : Fragment() {
                 })
                 .setNegativeButton("No", null).show()
 
-        })
-
-    }
-
-    private fun sendNotifications(toUid: String, appIcon: Int, body: String, title: String) {
-        var userToken: String = ""
-        val data =
-            Data(FirebaseAuth.getInstance().uid!!, appIcon, body, title, toUid)
-        val ref = FirebaseDatabase.getInstance().reference.child("Tokens")
-            .child(toUid)
-            .child("token")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userToken = snapshot.getValue(String::class.java)!!
-                val sender = Sender(data, userToken)
-                apiService.sendNotification(sender)
-                    .enqueue(object : retrofit2.Callback<MyResponse> {
-                        override fun onFailure(call: Call<MyResponse>, t: Throwable) {
-                            Toast.makeText(
-                                requireContext(),
-                                "On Failure, Nothing Happened",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<MyResponse>,
-                            response: Response<MyResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                if (response.body()!!.success !== 1) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Failed, Nothing Happened",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
-
-
-                    })
-            }
         })
 
     }

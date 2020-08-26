@@ -1,5 +1,6 @@
 package com.example.favour.notifications
 
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -12,4 +13,5 @@ interface ApiService {
     )
     @POST("fcm/send")
     fun sendNotification(@Body body: Sender): Call<MyResponse>
+    fun sendScheduled(@Body payload: JSONObject): Call<JSONObject>
 }

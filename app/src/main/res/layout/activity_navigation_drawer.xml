@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:gravity="center"
-                android:text="Made with ♡ Favour" />
+                android:text="@string/footer" />
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

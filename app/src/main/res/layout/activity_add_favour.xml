@@ -62,7 +62,7 @@
                     android:text="@string/urgent_request"
                     android:textColor="@color/black" />
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/urgent_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -277,6 +277,7 @@
                 android:visibility="gone" />
 
             <com.autofit.et.lib.AutoFitEditText
+                android:textSize="12sp"
                 android:id="@+id/textItems"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

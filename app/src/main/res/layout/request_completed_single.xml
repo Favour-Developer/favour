@@ -95,6 +95,26 @@
                         android:layout_marginStart="10dp">
 
                         <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date: "
+                                android:textColor="@color/black1" />
+
+                            <TextView
+                                android:id="@+id/date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12/08/2020"
+                                android:textColor="@color/black1"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:id="@+id/amountGroup"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -115,36 +135,16 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Date: "
-                                android:textColor="@color/black1" />
-
-                            <TextView
-                                android:id="@+id/date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="12/08/2020"
-                                android:textColor="@color/black1"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
 
                     </LinearLayout>
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/request_icon"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:src="@drawable/borrowing"
                     android:visibility="gone" />
 
@@ -153,11 +153,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/border"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="4dp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"

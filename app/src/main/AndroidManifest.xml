@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+
     <application
         android:name=".FirebaseHandler"
         android:allowBackup="true"
@@ -13,7 +14,7 @@
         android:roundIcon="@mipmap/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AcceptedRequest"></activity>
+        <activity android:name=".AcceptedRequest" />
         <activity android:name=".Practice" />
         <activity android:name=".ApprovalActivity" />
         <activity android:name=".OnBoarding" />
@@ -57,6 +58,16 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.favour.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

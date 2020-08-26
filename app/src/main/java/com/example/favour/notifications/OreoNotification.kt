@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.net.Uri
 import android.os.Build
+import androidx.core.app.NotificationCompat
 
 @Suppress("DEPRECATION")
 class OreoNotification(base: Context?) : ContextWrapper(base) {
@@ -53,10 +54,11 @@ class OreoNotification(base: Context?) : ContextWrapper(base) {
         soundUri: Uri?,
         icon: String?
     ): Notification.Builder {
-       return Notification.Builder(this, CHANNEL_ID).setContentIntent(pendingIntent)
-            .setContentTitle(title).setContentText(body).setSmallIcon(icon!!.toInt())
+        return Notification.Builder(this, CHANNEL_ID).setContentIntent(pendingIntent)
+            .setContentTitle(title).setStyle(Notification.BigTextStyle().bigText(body))
+            .setContentText(body).setSmallIcon(icon!!.toInt())
             .setSound(soundUri)
-            .setAutoCancel(true )
+            .setAutoCancel(true)
     }
 
 }
