@@ -54,16 +54,16 @@ class RequestFragment : Fragment() {
                     data.clear()
                     for (snap in snapshot.children) {
                         val requestDTO = snap.getValue(RequestDTO::class.java)
-                        if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid && !requestDTO.isProgress && !requestDTO.isCompleted)
+                         if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid && !requestDTO.isProgress && !requestDTO.isCompleted && !requestDTO.expired)
                             data.add(0, requestDTO)
                     }
-                    if (data.size > 0) blank.visibility = View.INVISIBLE
+                    if (data.size > 0) {
+                        blank.visibility = View.GONE
+                        adapter = RequestRecyclerAdapter(requireContext(), data)
+                        recyclerView.adapter = adapter
+                    }
                     else blank.visibility = View.VISIBLE
-                    adapter = RequestRecyclerAdapter(requireContext(), data)
-                    recyclerView.adapter = adapter
-
                 }
-
             })
     }
 

@@ -16,9 +16,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 
 
 open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +31,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     private lateinit var t: ActionBarDrawerToggle
     private lateinit var frameLayout: FrameLayout
     private lateinit var session: Session
+    private lateinit var read: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         super.setContentView(R.layout.activity_navigation_drawer)
@@ -62,7 +66,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
 //        actionBar?.setHomeButtonEnabled(true)
         t.syncState()
         navView.setNavigationItemSelectedListener(this)
-
+        checkNotification()
 
     }
 
@@ -106,6 +110,9 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     }
 
     fun openNotification(view: View) {
+        val m = HashMap<String, Boolean>()
+        m["read"] = true
+        read.ref.updateChildren(m as Map<String, Any>)
         frameLayout.removeAllViews()
         supportFragmentManager.beginTransaction().add(R.id.framelayout, FragmentNotification())
             .addToBackStack("fragNotification").commit()
@@ -184,6 +191,23 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (t.onOptionsItemSelected(item)) true else super.onOptionsItemSelected(item)
+    }
+
+    private fun checkNotification() {
+        read = FirebaseDatabase.getInstance().reference.child(session.NOTIFICATIONS)
+            .child(FirebaseAuth.getInstance().uid.toString())
+        read.child("read").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val b = snapshot.getValue(Boolean::class.java)
+                if (b != null) {
+                    if (!b) red_dot_notification.visibility = View.VISIBLE
+                    else red_dot_notification.visibility = View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
 

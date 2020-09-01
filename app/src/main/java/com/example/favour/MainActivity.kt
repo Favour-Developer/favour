@@ -9,14 +9,16 @@ import androidx.viewpager.widget.ViewPager
 import com.example.favour.notifications.Token
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : NavigationDrawer() {
     private lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager
-    val REQUEST_CODE = 200
     var isOpen: Boolean = false
     lateinit var faB_open: Animation
     lateinit var faB_close: Animation
@@ -30,6 +32,7 @@ class MainActivity : NavigationDrawer() {
         setContentView(R.layout.activity_main)
 
         updateToken()
+        checkActive()
 
         acceptedRequests.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, AcceptedRequest::class.java))
@@ -80,6 +83,30 @@ class MainActivity : NavigationDrawer() {
 
             })
     }
+
+    private fun checkActive() {
+        FirebaseDatabase.getInstance().reference.child(Session(this).CURRENT_PROCESSING_REQUEST)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (snap in snapshot.children) {
+                        val requestProcessDTO = snap.getValue(RequestProcessDTO::class.java)
+                        if (!requestProcessDTO!!.completed
+                            && requestProcessDTO.accepted
+                            && requestProcessDTO.favourerUID == FirebaseAuth.getInstance().uid
+                            && !requestProcessDTO.expired
+                        ) {
+                            red_dot_runner.visibility = View.VISIBLE
+                            break
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
+    }
+
 
     private fun startBorrowing() {
         fabMenuClose()

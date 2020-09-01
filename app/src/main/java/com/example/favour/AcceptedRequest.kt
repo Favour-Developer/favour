@@ -23,12 +23,12 @@ class AcceptedRequest : NavigationDrawer() {
 
         BackButtonToHome.setOnClickListener(View.OnClickListener {
             onBackPressed()
+            finish()
         })
 
         FirebaseDatabase.getInstance().reference.child(Session(this).CURRENT_PROCESSING_REQUEST)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -44,7 +44,6 @@ class AcceptedRequest : NavigationDrawer() {
         FirebaseDatabase.getInstance().reference.child(Session(this).REQUESTS)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -52,7 +51,7 @@ class AcceptedRequest : NavigationDrawer() {
                     for (i in snapshot.children) {
                         val requestDTO = i.getValue(RequestDTO::class.java)
                         for (j in requestIdList) {
-                            if (j == requestDTO!!.requestID) {
+                            if (j == requestDTO!!.requestID && !requestDTO.expired) {
                                 data.add(0, requestDTO)
                                 break
                             }

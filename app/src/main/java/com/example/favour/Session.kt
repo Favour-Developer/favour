@@ -28,9 +28,10 @@ class Session() {
     val USERS  = "Users"
     val CURRENT_PROCESSING_REQUEST = "Current_Processing_Request"
     val REQUESTS = "requests"
-    val NOTIFICATIONS = "Notifications"
+    val NOTIFICATIONS = "notifications"
     val TOKENS = "Tokens"
     val ISSUES = "Issues"
+    val REMINDER_NOTIFICATION = "Reminder_Notifications"
 
 
 

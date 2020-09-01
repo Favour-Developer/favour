@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.favour.RequestRecyclerAdapter.PlaceHolder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import java.io.Serializable
 import java.lang.StringBuilder
@@ -31,20 +34,34 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
     }
 
     override fun onBindViewHolder(holder: PlaceHolder, position: Int) {
+        if (dataList[position].userUid == FirebaseAuth.getInstance().uid) holder.icon?.visibility =
+            View.VISIBLE
+        else holder.fpLayout?.visibility = View.VISIBLE
+
         if (dataList[position].shop_bor == 0) {
             holder.icon?.setImageResource(R.drawable.shopping)
             holder.shopBor!!.text = "Shopping"
             holder.categories!!.text = dataList[position].categories
+            holder.fpIcon?.setImageResource(R.drawable.shopping)
+            holder.fPoints?.text = "100"
         } else {
             holder.icon?.setImageResource(R.drawable.borrowing)
             holder.shopBor!!.text = "Borrowing"
             holder.categories!!.text = dataList[position].items
+            holder.fpIcon?.setImageResource(R.drawable.borrowing)
+            holder.fPoints?.text = "50"
         }
 
         holder.personName!!.text = dataList[position].person_name
-        val s = StringBuilder()
-        s.append(dataList[position].timer).append(" hour")
-        holder.timer?.text = s
+
+        var time = ""
+        if (dataList[position].timer >= 24) {
+            time = (dataList[position].timer / 24).toString() + " Days "
+        }
+        time += (dataList[position].timer % 24).toString() + " Hours"
+
+        holder.timer!!.text = time
+
         if (dataList[position].isProgress == false) holder.inProgress!!.visibility = View.GONE
         if (dataList[position].urgent == false) holder.urgent!!.visibility = View.GONE
     }
@@ -58,6 +75,9 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
         var shopBor: TextView? = null
         var urgent: TextView? = null
         var inProgress: TextView? = null
+        var fpIcon: ImageView? = null
+        var fPoints: TextView? = null
+        var fpLayout: LinearLayout? = null
 
         init {
             icon = itemView.findViewById(R.id.request_icon)
@@ -67,6 +87,10 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
             shopBor = itemView.findViewById(R.id.shop_bor)
             urgent = itemView.findViewById(R.id.urgent_request)
             inProgress = itemView.findViewById(R.id.inProgress)
+            fpIcon = itemView.findViewById(R.id.fp_icon)
+            fPoints = itemView.findViewById(R.id.favourPoint)
+            fpLayout = itemView.findViewById(R.id.favourPointLayout)
+
             itemView.setOnClickListener(View.OnClickListener {
                 val intent = if (dataList[adapterPosition].isProgress) {
                     Intent(context, ApprovalActivity::class.java)

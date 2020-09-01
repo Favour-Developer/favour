@@ -69,15 +69,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status"
+                    android:text="Time Left"
                     android:textColor="@color/black1" />
 
                 <TextView
-                    android:id="@+id/urgency_status"
+                    android:id="@+id/timeLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Urgent"
+                    android:text="1 Hour"
                     android:textColor="@color/black1"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -92,16 +92,17 @@
 
             <Button
                 android:id="@+id/set_reminder"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@color/appTheme"
                 android:text="Set Reminder"
                 android:textAllCaps="false"
+                android:padding="4dp"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/cancel_accepted_request"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/curveborder"

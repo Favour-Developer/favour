@@ -14,17 +14,7 @@ class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     }
 
     override fun getItem(position: Int): Fragment {
-        if (position == 0) {
-//            val favourRequests = RequestFragment()
-//            val args = Bundle()
-//            args.putString("Favour Requests", "favourRequests")
-//            favourRequests.arguments = args
-            return RequestFragment()
-        }
-//        val myRequests = RequestFragment()
-//        val args = Bundle()
-//        args.putString("Favour Requests", "myRequests")
-//        myRequests.arguments = args
+        if (position == 0) return RequestFragment()
         return MyRequestFragment()
 
     }

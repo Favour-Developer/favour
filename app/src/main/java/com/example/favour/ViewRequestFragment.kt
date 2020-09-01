@@ -106,7 +106,10 @@ class ViewRequestFragment : Fragment() {
                         false,
                         false,
                         "",
-                        0
+                        0,
+                        false,
+                        0,
+                        false
                     )
                     val ref = FirebaseDatabase.getInstance().reference
 

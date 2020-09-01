@@ -45,6 +45,8 @@ class AddFavour : NavigationDrawer() {
     private lateinit var session: Session
     var toc: String = ""
     var items: String = ""
+    var timeLeft: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_favour)
@@ -157,16 +159,19 @@ class AddFavour : NavigationDrawer() {
         if (photoOrtext == 1) {
             uploadImage()
         }
+        timeLeft = if (urgent_switch.isChecked) 24 else 168
         val requestDTO = RequestDTO(
             session.getUsername(),
             session.getMobile() + "_" + toc,
             FirebaseAuth.getInstance().uid,
             getItemCategories(),
             items,
-            6,
+            System.currentTimeMillis().toString(),
+            timeLeft,
             urgent_switch.isChecked,
             id,
             photoOrtext,
+            false,
             false,
             false
         )

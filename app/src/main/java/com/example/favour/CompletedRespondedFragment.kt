@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_completed_responded.*
 class CompletedRespondedFragment : Fragment() {
     private var data: MutableList<RequestDTO> = ArrayList()
     lateinit var adapter: CompletedRequestAdapter
+    var points = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +50,12 @@ class CompletedRespondedFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (snap in snapshot.children) {
                         val requestProcessDTO = snap.getValue(RequestProcessDTO::class.java)
-                        if (requestProcessDTO!!.favourerUID == FirebaseAuth.getInstance().uid && requestProcessDTO.completed)
+                        if (requestProcessDTO!!.favourerUID == FirebaseAuth.getInstance().uid && requestProcessDTO.completed) {
                             requestIdList.add(requestProcessDTO.requestID)
+                            points += requestProcessDTO.points
+                        }
                     }
+                    totalPoints.text = points.toString()
                 }
 
                 override fun onCancelled(error: DatabaseError) {

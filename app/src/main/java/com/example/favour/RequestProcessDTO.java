@@ -15,8 +15,12 @@ public class RequestProcessDTO {
     private Boolean isDelivered;
     private String date;
     private Integer points;
+    private Boolean reminder;
+    private Integer remindingIn;
+    private Boolean expired;
 
-    public RequestProcessDTO(String requestID, String favourerUID, Boolean isAccepted, Integer amount, Boolean isAmountApproved, Boolean isCompleted, Boolean isCancelled, Boolean isPurchased, Boolean isDelivered, String date, Integer points) {
+
+    public RequestProcessDTO(String requestID, String favourerUID, Boolean isAccepted, Integer amount, Boolean isAmountApproved, Boolean isCompleted, Boolean isCancelled, Boolean isPurchased, Boolean isDelivered, String date, Integer points, Boolean reminder, Integer remindingIn, Boolean expired) {
         this.requestID = requestID;
         this.favourerUID = favourerUID;
         this.isAccepted = isAccepted;
@@ -28,6 +32,9 @@ public class RequestProcessDTO {
         this.isDelivered = isDelivered;
         this.date = date;
         this.points = points;
+        this.reminder = reminder;
+        this.remindingIn = remindingIn;
+        this.expired = expired;
     }
 
 
@@ -123,4 +130,23 @@ public class RequestProcessDTO {
     public void setPoints(Integer points) {
         this.points = points;
     }
+
+    public Boolean getReminder() {
+        if (reminder == null) return false;
+        return reminder;
+    }
+
+    public Integer getRemindingIn() {
+        return remindingIn;
+    }
+
+    public Boolean getExpired() {
+        if(expired == null) return false;
+        return expired;
+    }
+
+    public void setExpired(Boolean expired) {
+        this.expired = expired;
+    }
+
 }

@@ -44,7 +44,8 @@ class FragmentNotification : Fragment() {
         val database = FirebaseDatabase.getInstance().reference
         database.keepSynced(true)
         database.child("notifications")
-            .child(FirebaseAuth.getInstance().uid.toString()).addValueEventListener(object :
+            .child(FirebaseAuth.getInstance().uid.toString()).child("myNotifications")
+            .addValueEventListener(object :
                 ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("Failed to read", error.toException().toString())
