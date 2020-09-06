@@ -1,7 +1,6 @@
 package com.example.favour
 
 import android.app.ProgressDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,10 +12,8 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.*
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.fragment_front_signin.*
 import kotlinx.android.synthetic.main.fragment_password.*
 
 class PasswordFragment : Fragment() {
@@ -31,14 +28,16 @@ class PasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mobileNum = arguments?.getString("Mobile").toString()
-        name = arguments?.getString("Name").toString()
+        session = Session(requireContext())
+        mobileNum = session.getMobile()!!
+        name = session.getUsername()!!
         return inflater.inflate(R.layout.fragment_password, container, false)
     }
 
     companion object {
         lateinit var mobileNum: String
         lateinit var name: String
+        lateinit var session: Session
     }
 
     override fun onViewCreated(
@@ -46,7 +45,6 @@ class PasswordFragment : Fragment() {
         @Nullable savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        val session = Session(requireContext())
         val auth = FirebaseAuth.getInstance()
         val s1 = "Password for Mobile Number" + " XXXXXX" + (mobileNum.takeLast(4))
         passMobText.text = s1
@@ -59,42 +57,61 @@ class PasswordFragment : Fragment() {
                 progressDialog.setMessage("Signing up ...")
                 progressDialog.show()
                 val emailGenerate = "$mobileNum@favour.com"
-                auth.createUserWithEmailAndPassword(emailGenerate, pass2.text.toString())
-                    .addOnCompleteListener(requireActivity()) { task ->
-                        if (task.isSuccessful) {
-                            session.setVerifiedState(true)
-                            session.setLoginState(true)
-                            session.setSignUpState(true)
-                            session.setMobile(mobileNum)
-                            session.setUsername(name)
-                            FirebaseDatabase.getInstance().reference.child("Users")
-                                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
-                                .setValue(
-                                    UserDTO(
-                                        session.getUsername().toString(),
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        session.getMobile().toString()
-                                    )
-                                )
-                            progressDialog.dismiss()
-                            startActivity(Intent(context, MainActivity::class.java))
-                            activity?.finish()
-                        } else {
-                            progressDialog.dismiss()
-                            Snackbar.make(
-                                rootSignUp, "SignUp failed.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-
-                        }
-                    }
+                val emailCredential = EmailAuthProvider.getCredential(emailGenerate, pass2.text.toString())
+                completeSignUp(emailCredential)
+//                auth.createUserWithEmailAndPassword(emailGenerate, pass2.text.toString())
+//                    .addOnCompleteListener(requireActivity()) { task ->
+//                        if (task.isSuccessful) {
+//                            completeSignUp(emailCredential)
+//                            progressDialog.dismiss()
+//                        } else {
+//                            progressDialog.dismiss()
+//                            Snackbar.make(
+//                                rootSignUp, "SignUp failed.",
+//                                Snackbar.LENGTH_SHORT
+//                            ).show()
+//
+//                        }
+//                    }
             }
 
 
         })
+    }
+
+    private fun completeSignUp(emailCredential: AuthCredential) {
+        FirebaseAuth.getInstance().currentUser?.linkWithCredential(emailCredential)
+            ?.addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    session.setVerifiedState(true)
+                    session.setLoginState(true)
+                    session.setSignUpState(true)
+                    session.setMobile(mobileNum)
+                    session.setUsername(name)
+                    FirebaseDatabase.getInstance().reference.child("Users")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                        .setValue(
+                            UserDTO(
+                                session.getUsername().toString(),
+                                "",
+                                "",
+                                "",
+                                "",
+                                session.getMobile().toString()
+                            )
+                        )
+                    startActivity(Intent(context, MainActivity::class.java))
+                    activity?.finish()
+                } else {
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Sign up Failed!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
     }
 
 }

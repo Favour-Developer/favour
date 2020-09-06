@@ -1,7 +1,10 @@
 package com.example.favour
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 
 class Session() {
     lateinit var pref: SharedPreferences
@@ -25,15 +28,13 @@ class Session() {
     val GENDER = "GENDER"
     val PHOTOURL = "PHOTO_URL"
     val IS_FIRST_LAUNCH = "IsFirstLaunch"
-    val USERS  = "Users"
+    val USERS = "Users"
     val CURRENT_PROCESSING_REQUEST = "Current_Processing_Request"
     val REQUESTS = "requests"
     val NOTIFICATIONS = "notifications"
     val TOKENS = "Tokens"
     val ISSUES = "Issues"
     val REMINDER_NOTIFICATION = "Reminder_Notifications"
-
-
 
 
     constructor(context: Context) : this() {
@@ -51,6 +52,7 @@ class Session() {
     }
 
     fun getUsername(): String? {
+        if (pref.getString(NAME, "") == "") return "Add Name"
         return pref.getString(NAME, "")
     }
 
@@ -59,6 +61,7 @@ class Session() {
     }
 
     fun getEmail(): String? {
+        if (pref.getString(EMAIL, "Add Email") == "") return "Add Email"
         return pref.getString(EMAIL, "Add Email")
     }
 
@@ -67,6 +70,7 @@ class Session() {
     }
 
     fun getGender(): String? {
+        if (pref.getString(GENDER, "Add Gender") == "") return "Add Gender"
         return pref.getString(GENDER, "Add Gender")
     }
 
@@ -75,6 +79,7 @@ class Session() {
     }
 
     fun getAddress(): String? {
+        if (pref.getString(ADDRESS, "Add Address") == "") return "Add Address"
         return pref.getString(ADDRESS, "Add Address")
     }
 
@@ -83,10 +88,12 @@ class Session() {
     }
 
     fun getMobile(): String? {
+        if (pref.getString(MOBILE, "") == "") return "Add Mobile"
         return pref.getString(MOBILE, "")
     }
-    fun setPhotoUrl(address: String?) {
-        editor.putString(PHOTOURL, address).apply()
+
+    fun setPhotoUrl(photourl: String?) {
+        editor.putString(PHOTOURL, photourl).apply()
     }
 
     fun getPhotoUrl(): String? {
@@ -114,7 +121,7 @@ class Session() {
     }
 
     fun getVerifiedState(): Boolean? {
-        return pref.getBoolean(IS_MOBILE_VERIFIED,false)
+        return pref.getBoolean(IS_MOBILE_VERIFIED, false)
     }
 
     fun setFirstLaunch(b: Boolean) {
@@ -122,9 +129,31 @@ class Session() {
     }
 
     fun getFirstLaunch(): Boolean? {
-        return pref.getBoolean(IS_FIRST_LAUNCH,true)
+        return pref.getBoolean(IS_FIRST_LAUNCH, true)
     }
 
+    fun logout() {
+        editor.remove(NAME).commit()
+        editor.remove(EMAIL).commit()
+        editor.remove(ADDRESS).commit()
+        editor.remove(GENDER).commit()
+        editor.remove(MOBILE).commit()
+        editor.remove(PHOTOURL).commit()
+        val intent = Intent(context, Login::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        context.startActivity(intent)
+    }
 
+    fun setPhoneCredential(verificationID: String?, otp: String) {
+        editor.putString("verificationID", verificationID).apply()
+        editor.putString("otp", otp)
+    }
+
+    fun getPhoneCredential(): PhoneAuthCredential {
+        return PhoneAuthProvider.getCredential(
+            pref.getString("verificationID", "")!!,
+            pref.getString("otp", "")!!
+        )
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.example.favour
 
-import android.content.ContentValues.TAG
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,19 +12,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -34,9 +31,11 @@ import java.io.FileNotFoundException
 class EditProfileFragment : Fragment() {
 
     private val CHOOSE_IMAGE = 1
+    private val CROP_IMAGE = 2
     private lateinit var session: Session
     private var path: String = ""
     lateinit var uri: Uri
+    lateinit var imageUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +59,9 @@ class EditProfileFragment : Fragment() {
         if (session.getEmail() != "Add Email") editEmail.setText(session.getEmail())
         editMobile.text = session.getMobile()
         if (session.getAddress() != "Add Address") editAddress.setText(session.getAddress())
-        if (session.getPhotoUrl() != "") Picasso.with(requireContext()).load(session.getPhotoUrl())
-            .into(userImage)
+        if (session.getPhotoUrl() != "")
+            Picasso.with(requireContext()).load(session.getPhotoUrl()).into(userImage)
+
         genderGroup.check(
             when {
                 session.getGender() == "Male" -> R.id.male
@@ -76,7 +76,11 @@ class EditProfileFragment : Fragment() {
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             )
-            startActivityForResult(Intent.createChooser(intent, "Select Photo"), CHOOSE_IMAGE)
+            intent.type = "image/*"
+            val mimeType = arrayOf("image/jpeg", "image/jpg", "image/png")
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            startActivityForResult(intent, CHOOSE_IMAGE)
         })
 
 
@@ -114,6 +118,7 @@ class EditProfileFragment : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val downloadUri = task.result
+                        session.setPhotoUrl(path)
                         Log.d("URL", downloadUri.toString())
                     } else {
                         Log.d("URL", "Failed")
@@ -129,7 +134,8 @@ class EditProfileFragment : Fragment() {
                 .setValue(
                     UserDTO(
                         session.getUsername().toString(), editEmail.text.toString(),
-                        session.getGender().toString(), editAddress.text.toString(), "",
+                        session.getGender().toString(), editAddress.text.toString(),
+                        session.getPhotoUrl()!!,
                         session.getMobile().toString()
                     )
                 )
@@ -165,14 +171,26 @@ class EditProfileFragment : Fragment() {
             }
         } else
  */
-        if (requestCode == CHOOSE_IMAGE) {
-            val image: Uri? = data?.data
+        if (requestCode == CHOOSE_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                uri = getUri(decodeUri(image))
+                imageUri = data.data!!
+                cropImage(imageUri)
+            }
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                val result = CropImage.getActivityResult(data)
+                uri = getUri(decodeUri(result.uri))
                 path = uri.toString()
                 Picasso.with(requireContext()).load(uri).into(userImage)
             }
         }
+    }
+
+    private fun cropImage(imageUri: Uri) {
+        CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON)
+            .setAspectRatio(1, 1)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .start(requireContext(), this)
     }
 
     private fun getUri(image: Bitmap): Uri {
@@ -189,7 +207,7 @@ class EditProfileFragment : Fragment() {
 
     @Throws(FileNotFoundException::class)
     fun decodeUri(uri: Uri?): Bitmap {
-        val requiredSize = 256
+        val requiredSize = 300
         val c = requireContext()
         val o: BitmapFactory.Options = BitmapFactory.Options()
         o.inJustDecodeBounds = true
@@ -198,10 +216,10 @@ class EditProfileFragment : Fragment() {
         var height_tmp: Int = o.outHeight
         var scale = 1
         while (true) {
-            if (width_tmp / 2 < requiredSize && height_tmp / 2 < requiredSize) break
-            if (width_tmp > requiredSize) width_tmp /= 2
-            if (height_tmp > requiredSize) height_tmp /= 2
-            scale *= 2
+            if (width_tmp  < requiredSize || height_tmp < requiredSize) break
+            width_tmp /= 2
+            height_tmp /= 2
+            scale++
         }
         val o2: BitmapFactory.Options = BitmapFactory.Options()
         o2.inSampleSize = scale

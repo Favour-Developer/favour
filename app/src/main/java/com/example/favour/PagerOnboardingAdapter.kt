@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
 
 
 class PagerOnboardingAdapter : PagerAdapter {
 
     private val images =
-        intArrayOf(R.drawable.guide_page_1, R.drawable.guide_page_2, R.drawable.guide_page_3)
+        intArrayOf(R.drawable.guide_page_1, R.drawable.guide_page_2, R.drawable.guide_page_3, R.drawable.guide_page_4, R.drawable.guide_page_5)
     lateinit var context: Context
 
     var mLayoutInflater: LayoutInflater? = null
@@ -32,7 +31,7 @@ class PagerOnboardingAdapter : PagerAdapter {
     }
 
     override fun getCount(): Int {
-        return 3
+        return images.size
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

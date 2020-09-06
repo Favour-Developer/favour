@@ -338,11 +338,13 @@ class ProcessRequestFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (snap in snapshot.children) {
                         val r = snap.getValue(RequestProcessDTO::class.java)
-                        if (r!!.requestID == requestDTO.requestID && r.completed) {
-                            requireActivity().supportFragmentManager.beginTransaction()
-                                .replace(R.id.containerProcess, FragmentFavourCompleted())
-                                .commit()
+                        if (isAdded) {
+                            if (r!!.requestID == requestDTO.requestID && r.completed) {
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                    .replace(R.id.containerProcess, FragmentFavourCompleted())
+                                    .commit()
 
+                            }
                         }
                     }
                 }

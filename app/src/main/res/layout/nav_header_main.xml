@@ -11,14 +11,14 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="50dp">
+        android:layout_gravity="center"
+        app:cardCornerRadius="150dp">
 
         <ImageView
             android:id="@+id/userImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/appTheme"
-            android:scaleType="centerCrop"
             android:src="@drawable/account" />
     </androidx.cardview.widget.CardView>
 

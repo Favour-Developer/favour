@@ -125,19 +125,18 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
 
 
     private fun logoutdialog() {
-        val alert: Any = AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle("Logout")
             .setMessage("Are you sure you want to logout ?")
             .setPositiveButton(
                 "Yes"
             ) { _, _ ->
                 session.setLoginState(false)
-//                Log.i("Session",Gson().toJson(session.toString()).toString())
-                startActivity(Intent(this, Login::class.java))
+                session.logout()
             }
             .setNegativeButton(
-                "No"
-            ) { dialogInterface, _ -> dialogInterface.cancel() }
+                "No", null
+            )
             .show()
     }
 

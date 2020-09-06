@@ -1,5 +1,6 @@
 package com.example.favour
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -81,7 +82,9 @@ class AcceptedRequestAdapter(val context: Context, val dataList: MutableList<Req
             itemView.setOnClickListener(View.OnClickListener {
                 val intent = Intent(context, ProcessFlowActivity::class.java)
                 intent.putExtra("Request_Object", Gson().toJson(dataList[adapterPosition]))
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 context.startActivity(intent)
+//                (context as Activity).finish()
             })
 
             remind.setOnClickListener(View.OnClickListener {

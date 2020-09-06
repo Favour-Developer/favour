@@ -156,6 +156,12 @@ class ApprovalActivity : NavigationDrawer() {
                                     approveAmount.visibility = View.GONE
                                     itemDelivered.visibility = View.VISIBLE
                                     i.ref.updateChildren(m as Map<String, Any>)
+                                    Permssions(this@ApprovalActivity).sendNotifications(
+                                        r.favourerUID,
+                                        R.mipmap.app_icon,
+                                        "Deliver the items at the given address.",
+                                        "Amount Confirmed"
+                                    )
                                     break
                                 }
 
@@ -185,12 +191,20 @@ class ApprovalActivity : NavigationDrawer() {
                             val md = HashMap<String, String>()
                             m["delivered"] = true
                             m["completed"] = true
-                            if (requestDTO.shop_bor == 0) mp["points"] = 100
-                            else mp["points"] = 50
+                            var points = 0
+                            if (requestDTO.shop_bor == 0) points = 100
+                            else points = 50
+                            mp["points"] = points
                             md["date"] = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(Date())
                             i.ref.updateChildren(m as Map<String, Any>)
                             i.ref.updateChildren(mp as Map<String, Any>)
                             i.ref.updateChildren(md as Map<String, Any>)
+                            Permssions(this@ApprovalActivity).sendNotifications(
+                                j.favourerUID,
+                                R.mipmap.app_icon,
+                                "Congratulations! You have earned $points points.",
+                                "Favour Completed"
+                            )
                             break
                         }
 

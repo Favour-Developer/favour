@@ -51,18 +51,19 @@ class RequestFragment : Fragment() {
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    data.clear()
-                    for (snap in snapshot.children) {
-                        val requestDTO = snap.getValue(RequestDTO::class.java)
-                         if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid && !requestDTO.isProgress && !requestDTO.isCompleted && !requestDTO.expired)
-                            data.add(0, requestDTO)
-                    }
-                    if (data.size > 0) {
-                        blank.visibility = View.GONE
+                    if (isAdded) {
+                        data.clear()
+                        for (snap in snapshot.children) {
+                            val requestDTO = snap.getValue(RequestDTO::class.java)
+                            if (requestDTO!!.userUid != FirebaseAuth.getInstance().uid && !requestDTO.isProgress && !requestDTO.isCompleted && !requestDTO.expired)
+                                data.add(0, requestDTO)
+                        }
+                        if (data.size > 0) {
+                            blank.visibility = View.GONE
+                        } else blank.visibility = View.VISIBLE
                         adapter = RequestRecyclerAdapter(requireContext(), data)
                         recyclerView.adapter = adapter
                     }
-                    else blank.visibility = View.VISIBLE
                 }
             })
     }

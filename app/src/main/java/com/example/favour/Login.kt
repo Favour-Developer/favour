@@ -16,7 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_front_signin.*
@@ -58,14 +63,40 @@ class Login : AppCompatActivity() {
                         this
                     ) { task ->
                         if (task.isSuccessful) {
-
-
                             session.setLoginState(true)
                             session.setSignUpState(true)
-                            session.setMobile(mobileLogin.text.toString())
-                            progressDialog.dismiss()
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            FirebaseDatabase.getInstance().reference.child(session.USERS)
+                                .child(FirebaseAuth.getInstance().uid!!)
+                                .addListenerForSingleValueEvent(
+                                    object : ValueEventListener {
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            val userDTO = snapshot.getValue(UserDTO::class.java)
+                                            if (userDTO != null) {
+                                                session.setMobile(userDTO.mobile)
+                                                session.setUsername(userDTO.username)
+                                                session.setEmail(userDTO.email)
+                                                session.setGender(userDTO.gender)
+                                                val ref =
+                                                    FirebaseStorage.getInstance().reference.child("Profile_photos")
+                                                        .child(FirebaseAuth.getInstance().uid!!)
+                                                ref.downloadUrl.addOnSuccessListener { uri ->
+                                                    session.setPhotoUrl(uri.toString())
+                                                }
+                                                progressDialog.dismiss()
+                                                startActivity(
+                                                    Intent(
+                                                        applicationContext,
+                                                        MainActivity::class.java
+                                                    )
+                                                )
+                                                finish()
+                                            }
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                        }
+                                    })
+
 
                         } else {
                             progressDialog.dismiss()
