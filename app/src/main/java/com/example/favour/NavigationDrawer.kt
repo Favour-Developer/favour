@@ -119,8 +119,9 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     }
 
     fun gotoHome(view: View) {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
 
@@ -132,6 +133,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
                 "Yes"
             ) { _, _ ->
                 session.setLoginState(false)
+                session.setVerifiedState(false)
                 session.logout()
             }
             .setNegativeButton(
@@ -193,7 +195,7 @@ open class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationIt
     }
 
     private fun checkNotification() {
-        read = FirebaseDatabase.getInstance().reference.child(session.NOTIFICATIONS)
+        read = Session(this).databaseRoot().child(session.NOTIFICATIONS)
             .child(FirebaseAuth.getInstance().uid.toString())
         read.child("read").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

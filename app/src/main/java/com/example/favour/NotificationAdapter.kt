@@ -32,13 +32,14 @@ class NotificationAdapter(val context: Context, val dataList: MutableList<Data>)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val ref = FirebaseStorage.getInstance().reference.child("Profile_photos")
+        val ref = Session(context).storageRoot().child("Profile_photos")
             .child(dataList[position].getUser().toString())
         ref.downloadUrl.addOnSuccessListener { uri ->
             Picasso.with(context).load(uri).into(holder.icon)
         }
         holder.title!!.text = dataList[position].getTitle()
         holder.body!!.text = dataList[position].getBody()
+        holder.timestamp!!.text = dataList[position].getTimestamp()
 
     }
 
@@ -47,11 +48,13 @@ class NotificationAdapter(val context: Context, val dataList: MutableList<Data>)
         var icon: ImageView? = null
         var title: TextView? = null
         var body: TextView? = null
+        var timestamp: TextView?= null
 
         init {
             icon = itemView.findViewById(R.id.userIcon)
             title = itemView.findViewById(R.id.noticeTitle)
             body = itemView.findViewById(R.id.noticeMessage)
+            timestamp = itemView.findViewById(R.id.timestamp)
         }
 
     }

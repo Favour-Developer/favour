@@ -12,10 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.favour.RequestRecyclerAdapter.PlaceHolder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import java.io.Serializable
-import java.lang.StringBuilder
 
 class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<RequestDTO>) :
     RecyclerView.Adapter<PlaceHolder>() {
@@ -95,6 +92,7 @@ class RequestRecyclerAdapter(val context: Context, val dataList: MutableList<Req
                 val intent = if (dataList[adapterPosition].isProgress) {
                     Intent(context, ApprovalActivity::class.java)
                 } else {
+
                     Intent(context, ProcessFlowActivity::class.java)
                 }
                 intent.putExtra("Request_Object", Gson().toJson(dataList[adapterPosition]))

@@ -8,10 +8,10 @@ import android.view.animation.AnimationUtils
 import androidx.viewpager.widget.ViewPager
 import com.example.favour.notifications.Token
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,7 +30,7 @@ class MainActivity : NavigationDrawer() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        FirebaseAnalytics.getInstance(this).setUserId(FirebaseAuth.getInstance().uid)
         updateToken()
         checkActive()
 
@@ -85,7 +85,7 @@ class MainActivity : NavigationDrawer() {
     }
 
     private fun checkActive() {
-        FirebaseDatabase.getInstance().reference.child(Session(this).CURRENT_PROCESSING_REQUEST)
+        Session(this).databaseRoot().child(Session(this).CURRENT_PROCESSING_REQUEST)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (snap in snapshot.children) {
@@ -156,7 +156,7 @@ class MainActivity : NavigationDrawer() {
 
     private fun updateToken() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val ref = FirebaseDatabase.getInstance().reference.child("Tokens")
+        val ref = Session(this).databaseRoot().child("Tokens")
         val token = Token(FirebaseInstanceId.getInstance().token!!)
         ref.child(firebaseUser!!.uid).setValue(token)
     }

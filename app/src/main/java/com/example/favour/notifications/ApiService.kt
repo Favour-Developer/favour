@@ -13,5 +13,4 @@ interface ApiService {
     )
     @POST("fcm/send")
     fun sendNotification(@Body body: Sender): Call<MyResponse>
-    fun sendScheduled(@Body payload: JSONObject): Call<JSONObject>
 }

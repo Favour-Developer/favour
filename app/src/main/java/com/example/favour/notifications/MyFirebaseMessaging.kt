@@ -11,8 +11,8 @@ import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import com.example.favour.MainActivity
 import com.example.favour.R
+import com.example.favour.Session
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -23,7 +23,7 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
 
         val sented = mRemoteMessage.data["sented"]
         var user = mRemoteMessage.data["user"]
-        if(user == null) user = "Server"
+        if (user == null) user = "Server"
         val firebaseUser = FirebaseAuth.getInstance().currentUser
 
         if (firebaseUser != null && sented == firebaseUser.uid) {
@@ -35,9 +35,10 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
                 R.mipmap.app_icon,
                 mRemoteMessage.data["body"]!!,
                 mRemoteMessage.data["title"]!!,
-                sented
+                sented,
+                mRemoteMessage.data["timestamp"]!!
             )
-            val database = FirebaseDatabase.getInstance().reference
+            val database = Session(this).databaseRoot()
             val ref = database.child("notifications")
                 .child(FirebaseAuth.getInstance().uid.toString())
             ref.child("myNotifications").push().setValue(data)
@@ -77,7 +78,7 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
 //        val i = 0
 //        if (j > 0) j = i
 
-        noti.notify((System.currentTimeMillis()%10000).toInt(), builder.build())
+        noti.notify((System.currentTimeMillis() % 10000).toInt(), builder.build())
     }
 
     private fun sendNotificationOreo(mRemoteMessage: RemoteMessage) {
@@ -101,7 +102,10 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
 //        val i = 0
 //        if (j > 0) j = i
 
-        oreoNotification.getManager!!.notify((System.currentTimeMillis()%10000).toInt(), builder.build())
+        oreoNotification.getManager!!.notify(
+            (System.currentTimeMillis() % 10000).toInt(),
+            builder.build()
+        )
 
     }
 }

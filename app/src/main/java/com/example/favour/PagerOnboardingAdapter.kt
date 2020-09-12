@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.viewpager.widget.PagerAdapter
+import com.jsibbold.zoomage.ZoomageView
 
 
 class PagerOnboardingAdapter : PagerAdapter {
@@ -37,8 +38,8 @@ class PagerOnboardingAdapter : PagerAdapter {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView: View =
             mLayoutInflater!!.inflate(R.layout.fragment_onboarding, container, false)
-        val imageView: ImageView =
-            itemView.findViewById<View>(R.id.guideImage) as ImageView
+        val imageView: ZoomageView =
+            itemView.findViewById<View>(R.id.guideImage) as ZoomageView
         imageView.setImageResource(images[position])
         container.addView(itemView,0)
         return itemView

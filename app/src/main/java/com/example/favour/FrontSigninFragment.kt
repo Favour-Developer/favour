@@ -38,16 +38,13 @@ class FrontSigninFragment : Fragment() {
         })
         signUp.setOnClickListener(View.OnClickListener {
             if (CheckerMatcher().checkEmptyNamePhone(signInName, mob_number)) {
-//                val bundle = Bundle()
                 val session = Session(requireContext())
                 session.setUsername(signInName.text.toString())
                 session.setMobile(mob_number.text.toString())
-//                bundle.putString("Name", signInName.text.toString())
-//                bundle.putString("Mobile", mob_number.text.toString())
+
                 lateinit var frag: Fragment
-                if (session.getVerifiedState()!!) frag = PasswordFragment()
-                else frag = OtpFragment()
-//                frag.arguments = bundle
+                frag = if (session.getVerifiedState()!!) PasswordFragment()
+                else OtpFragment()
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.fml_signin, frag).addToBackStack("FragFrontSignIn")
                     .commit()

@@ -22,8 +22,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_favour.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -175,12 +173,12 @@ class AddFavour : NavigationDrawer() {
             false,
             false
         )
-        val database = FirebaseDatabase.getInstance().reference
+        val database = session.databaseRoot()
         database.child("requests").push().setValue(requestDTO)
     }
 
     private fun uploadImage() {
-        val ref = FirebaseStorage.getInstance().reference.child("Requests")
+        val ref = session.storageRoot().child("Requests")
             .child(session.getMobile() + "_" + toc)
         val progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Uploading Image ...")

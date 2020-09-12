@@ -19,8 +19,6 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_help.*
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -74,7 +72,7 @@ class HelpFragment : Fragment() {
 
         uploadIssue.setOnClickListener(View.OnClickListener {
             if (!TextUtils.isEmpty(issueText.text)) {
-                val database = FirebaseDatabase.getInstance().reference
+                val database = Session(requireContext()).databaseRoot()
                 d = database.child("Issues").child(FirebaseAuth.getInstance().uid.toString()).push()
                 d.child("Creation_time").setValue(
                     SimpleDateFormat(
@@ -119,7 +117,7 @@ class HelpFragment : Fragment() {
         )
         d.child("issueURL").setValue(imageLink)
 
-        val ref = FirebaseStorage.getInstance().reference.child("Issues")
+        val ref = Session(requireContext()).storageRoot().child("Issues")
             .child(FirebaseAuth.getInstance().uid.toString()).child(imageLink)
         val progressDialog = ProgressDialog(requireContext())
         progressDialog.setTitle("Uploading Image ...")

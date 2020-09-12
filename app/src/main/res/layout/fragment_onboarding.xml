@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FragmentOnboarding1"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F8D270">
 
-    <ImageView
+    <com.jsibbold.zoomage.ZoomageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/guideImage"
+        app:zoomage_minScale="1"
+        app:zoomage_maxScale="4"
         android:src="@drawable/guide_page_1" />
 
 

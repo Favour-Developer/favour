@@ -57,7 +57,7 @@ class ApprovalActivity : NavigationDrawer() {
 
 
 
-        ref = FirebaseDatabase.getInstance().reference
+        ref = Session(this).databaseRoot()
 
         if (requestDTO.shop_bor == 0) shoppingApproval()
         else borrowingApproval()
@@ -122,6 +122,7 @@ class ApprovalActivity : NavigationDrawer() {
                                 quotedAmount.text = requestProcessDTO.amount.toString()
                                 approveAmount.visibility = View.VISIBLE
                                 approveAmount.setBackgroundColor(resources.getColor(R.color.black))
+                                waitingLayout.visibility = View.GONE
                             } else if (requestProcessDTO.amountApproved) {
                                 itemDelivered.visibility = View.VISIBLE
                             } else {
@@ -196,6 +197,7 @@ class ApprovalActivity : NavigationDrawer() {
                             else points = 50
                             mp["points"] = points
                             md["date"] = SimpleDateFormat("dd/MM/yyyy", Locale.US).format(Date())
+                            md["time"] = SimpleDateFormat("HH:mm:ss", Locale.US).format(Date())
                             i.ref.updateChildren(m as Map<String, Any>)
                             i.ref.updateChildren(mp as Map<String, Any>)
                             i.ref.updateChildren(md as Map<String, Any>)
@@ -227,7 +229,6 @@ class ApprovalActivity : NavigationDrawer() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
                 }
             })
     }
@@ -247,7 +248,7 @@ class ApprovalActivity : NavigationDrawer() {
     }
 
     private fun getPhone(favourerUID: String?) {
-        FirebaseDatabase.getInstance().reference.child(Session(this).USERS).child(favourerUID!!)
+        ref.child(Session(this).USERS).child(favourerUID!!)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
 

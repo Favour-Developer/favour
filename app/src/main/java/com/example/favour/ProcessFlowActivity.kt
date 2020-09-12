@@ -19,11 +19,16 @@ class ProcessFlowActivity : AppCompatActivity() {
         setContentView(R.layout.activity_process_flow)
         val bundle = Bundle()
         bundle.putString("RequestObject", s)
-//        Log.i("Clicked Object",Gson().toJson(requestDTO))
         val frag: Fragment
 
         frag = if (requestDTO.isProgress && !requestDTO.isCompleted) ProcessRequestFragment()
-        else ViewRequestFragment()
+        else {
+            if (intent.extras!!.containsKey("type")) bundle.putInt(
+                "type",
+                intent.extras!!.getInt("type")
+            )
+            ViewRequestFragment()
+        }
         frag.arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.containerProcess, frag).commit()
     }

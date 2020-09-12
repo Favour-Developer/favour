@@ -7,17 +7,15 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.example.favour.notifications.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import retrofit2.Call
 import retrofit2.Response
-import kotlin.coroutines.coroutineContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Permssions() {
 
@@ -31,9 +29,15 @@ class Permssions() {
         val apiService =
             Client.Client.getClient("https://fcm.googleapis.com/")!!.create(ApiService::class.java)
         var userToken: String = ""
+        val timestamp = SimpleDateFormat(
+            "dd/MM/yyyy HH:mm",
+            Locale.US
+        ).format(
+            Date()
+        )
         val data =
-            Data(FirebaseAuth.getInstance().uid!!, appIcon, body, title, toUid)
-        val ref = FirebaseDatabase.getInstance().reference.child("Tokens")
+            Data(FirebaseAuth.getInstance().uid!!, appIcon, body, title, toUid, timestamp)
+        val ref = Session(context).databaseRoot().child("Tokens")
             .child(toUid)
             .child("token")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {

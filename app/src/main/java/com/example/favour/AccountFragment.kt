@@ -11,6 +11,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_account.*
 
@@ -47,7 +48,9 @@ class AccountFragment : Fragment() {
 
         if (session.getPhotoUrl() != "") {
             Picasso.with(requireContext())
-                .load(session.getPhotoUrl()).into(userImage)
+                .load(session.getPhotoUrl())
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(userImage)
             Log.d("PhotoURl", session.getPhotoUrl().toString())
         }
 

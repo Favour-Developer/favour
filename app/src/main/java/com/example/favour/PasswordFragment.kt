@@ -13,7 +13,6 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.*
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_password.*
 
 class PasswordFragment : Fragment() {
@@ -59,20 +58,6 @@ class PasswordFragment : Fragment() {
                 val emailGenerate = "$mobileNum@favour.com"
                 val emailCredential = EmailAuthProvider.getCredential(emailGenerate, pass2.text.toString())
                 completeSignUp(emailCredential)
-//                auth.createUserWithEmailAndPassword(emailGenerate, pass2.text.toString())
-//                    .addOnCompleteListener(requireActivity()) { task ->
-//                        if (task.isSuccessful) {
-//                            completeSignUp(emailCredential)
-//                            progressDialog.dismiss()
-//                        } else {
-//                            progressDialog.dismiss()
-//                            Snackbar.make(
-//                                rootSignUp, "SignUp failed.",
-//                                Snackbar.LENGTH_SHORT
-//                            ).show()
-//
-//                        }
-//                    }
             }
 
 
@@ -88,7 +73,7 @@ class PasswordFragment : Fragment() {
                     session.setSignUpState(true)
                     session.setMobile(mobileNum)
                     session.setUsername(name)
-                    FirebaseDatabase.getInstance().reference.child("Users")
+                    session.databaseRoot().child("Users")
                         .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
                         .setValue(
                             UserDTO(
@@ -104,10 +89,9 @@ class PasswordFragment : Fragment() {
                     activity?.finish()
                 } else {
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Sign up Failed!",
-                            Toast.LENGTH_SHORT
+                        Snackbar.make(
+                            rootSignUp, "SignUp failed. Maybe account already exists!",
+                            Snackbar.LENGTH_SHORT
                         ).show()
                     }
                 }

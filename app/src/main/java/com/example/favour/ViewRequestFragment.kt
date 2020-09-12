@@ -14,7 +14,6 @@ import com.example.favour.notifications.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_view_request.*
@@ -33,6 +32,7 @@ class ViewRequestFragment : Fragment() {
     companion object {
         lateinit var requestDTO: RequestDTO
         lateinit var s: String
+        var type = 0
     }
 
     override fun onCreateView(
@@ -40,6 +40,7 @@ class ViewRequestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        if (arguments?.containsKey("type")!!) type = arguments?.getInt("type")!!
         s = arguments?.getString("RequestObject")!!
         requestDTO = Gson().fromJson(s, RequestDTO::class.java)
 
@@ -77,10 +78,56 @@ class ViewRequestFragment : Fragment() {
 
         val pFrag = ProcessRequestFragment()
         pFrag.arguments = bundle
+        val session = Session(requireContext())
+        if (type == 1) {
+            line.visibility = View.VISIBLE
+            favourerNameLayout.visibility = View.VISIBLE
+
+            session.databaseRoot().child(session.CURRENT_PROCESSING_REQUEST)
+                .addListenerForSingleValueEvent((object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (snap in snapshot.children) {
+                            val requestProcessDTO = snap.getValue(RequestProcessDTO::class.java)
+                            if (requestProcessDTO?.requestID == requestDTO.requestID) {
+                                session.databaseRoot().child(session.USERS)
+                                    .child(requestProcessDTO?.favourerUID!!).child("username")
+                                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                                        override fun onDataChange(childSnapshot: DataSnapshot) {
+                                            favourerName.text =
+                                                childSnapshot.getValue(String::class.java)
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                        }
+                                    })
+                                break
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                }))
+        }
 
 
         if (requestDTO.userUid == FirebaseAuth.getInstance().uid || requestDTO.isCompleted) acceptRequest.visibility =
             View.GONE
+        else {
+            val cntref =
+                session.databaseRoot().child("Logs").child(requestDTO.requestID)
+                    .child(FirebaseAuth.getInstance().uid!!)
+            cntref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var count = snapshot.child("count").getValue(Int::class.java)
+                    if (count == null) count = 0
+                    cntref.child("count").setValue(count + 1)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        }
 
 
         acceptRequest.setOnClickListener(View.OnClickListener {
@@ -111,7 +158,7 @@ class ViewRequestFragment : Fragment() {
                         0,
                         false
                     )
-                    val ref = FirebaseDatabase.getInstance().reference
+                    val ref = session.databaseRoot()
 
                     ref.child(Session(requireContext()).CURRENT_PROCESSING_REQUEST).push()
                         .setValue(requestProcessDTO)

@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 
@@ -58,7 +57,7 @@ class CompletedRequestAdapter(
         }
 
 
-        FirebaseDatabase.getInstance().reference.child(Session(context).CURRENT_PROCESSING_REQUEST)
+        Session(context).databaseRoot().child(Session(context).CURRENT_PROCESSING_REQUEST)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
 
@@ -95,6 +94,7 @@ class CompletedRequestAdapter(
         init {
             itemView.setOnClickListener(View.OnClickListener {
                 val intent = Intent(context, ProcessFlowActivity::class.java)
+                intent.putExtra("type", type)
                 intent.putExtra("Request_Object", Gson().toJson(dataList[adapterPosition]))
                 context.startActivity(intent)
                 (context as Activity).finish()

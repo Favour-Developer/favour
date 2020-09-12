@@ -10,7 +10,6 @@ import androidx.annotation.Nullable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_completed_responded.*
 
@@ -42,7 +41,7 @@ class CompletedRespondedFragment : Fragment() {
     }
 
     private fun populateData() {
-        val database = FirebaseDatabase.getInstance().reference
+        val database = Session(requireContext()).databaseRoot()
         database.keepSynced(true)
         val requestIdList = ArrayList<String>()
         database.child(Session(requireContext()).CURRENT_PROCESSING_REQUEST)

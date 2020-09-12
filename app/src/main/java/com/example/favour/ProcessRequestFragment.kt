@@ -50,7 +50,8 @@ class ProcessRequestFragment : Fragment() {
         requestDTO = Gson().fromJson(s, RequestDTO::class.java)
         requestID = requestDTO.requestID
         ref =
-            FirebaseDatabase.getInstance().reference.child(Session(requireContext()).CURRENT_PROCESSING_REQUEST)
+            Session(requireContext()).databaseRoot()
+                .child(Session(requireContext()).CURRENT_PROCESSING_REQUEST)
         return inflater.inflate(R.layout.fragment_process_request, container, false)
     }
 
@@ -321,6 +322,37 @@ class ProcessRequestFragment : Fragment() {
         if (b) ref.removeEventListener(listener)
         removeAllLayouts()
         process4Layout.visibility = View.VISIBLE
+
+        Session(requireContext()).databaseRoot().child("Users").child(requestDTO.userUid)
+            .child("address").addListenerForSingleValueEvent((object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    userAddress.text = snapshot.getValue(String::class.java)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            }))
+
+
+        listener = ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (snap in snapshot.children) {
+                    val r = snap.getValue(RequestProcessDTO::class.java)
+                    if (isAdded) {
+                        if (r!!.requestID == requestDTO.requestID && r.completed) {
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .replace(R.id.containerProcess, FragmentFavourCompleted())
+                                .commit()
+
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
         itemDelivered.setOnClickListener(View.OnClickListener {
             Permssions(requireContext()).sendNotifications(
                 requestDTO.userUid,
@@ -333,28 +365,6 @@ class ProcessRequestFragment : Fragment() {
                 "Notification sent for delivery approval. You can also call to remind.",
                 Toast.LENGTH_LONG
             ).show()
-
-            listener = ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (snap in snapshot.children) {
-                        val r = snap.getValue(RequestProcessDTO::class.java)
-                        if (isAdded) {
-                            if (r!!.requestID == requestDTO.requestID && r.completed) {
-                                requireActivity().supportFragmentManager.beginTransaction()
-                                    .replace(R.id.containerProcess, FragmentFavourCompleted())
-                                    .commit()
-
-                            }
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-            })
-
-
         })
     }
 

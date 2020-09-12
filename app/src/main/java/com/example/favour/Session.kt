@@ -3,8 +3,13 @@ package com.example.favour
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class Session() {
     lateinit var pref: SharedPreferences
@@ -139,6 +144,8 @@ class Session() {
         editor.remove(GENDER).commit()
         editor.remove(MOBILE).commit()
         editor.remove(PHOTOURL).commit()
+        editor.remove(IS_MOBILE_VERIFIED).commit()
+        FirebaseAuth.getInstance().signOut()
         val intent = Intent(context, Login::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
@@ -154,6 +161,14 @@ class Session() {
             pref.getString("verificationID", "")!!,
             pref.getString("otp", "")!!
         )
+    }
+
+    fun databaseRoot(): DatabaseReference {
+        return FirebaseDatabase.getInstance().reference.child("d2")
+    }
+
+    fun storageRoot(): StorageReference {
+        return FirebaseStorage.getInstance().reference.child("d2")
     }
 
 }

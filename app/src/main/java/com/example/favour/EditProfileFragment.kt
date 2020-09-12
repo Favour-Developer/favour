@@ -16,9 +16,6 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -103,7 +100,7 @@ class EditProfileFragment : Fragment() {
             session.setAddress(editAddress.text.toString())
             session.setEmail(editEmail.text.toString())
 
-            val storageReference: StorageReference = FirebaseStorage.getInstance().reference
+            val storageReference = session.storageRoot()
                 .child("Profile_photos")
                 .child(FirebaseAuth.getInstance().uid.toString())
             storageReference.putFile(Uri.parse(path))
@@ -129,7 +126,7 @@ class EditProfileFragment : Fragment() {
             if (radioId != -1) {
                 session.setGender(view.findViewById<RadioButton>(radioId).text.toString())
             }
-            FirebaseDatabase.getInstance().reference.child("Users")
+           session.databaseRoot().child("Users")
                 .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
                 .setValue(
                     UserDTO(

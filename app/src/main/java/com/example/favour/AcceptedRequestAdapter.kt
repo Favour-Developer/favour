@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 
@@ -47,7 +46,7 @@ class AcceptedRequestAdapter(val context: Context, val dataList: MutableList<Req
         time += (dataList[position].timer%24).toString()  + " Hours"
         holder.timeLeft.text = time
         val ref =
-            FirebaseDatabase.getInstance().reference.child(Session(context).CURRENT_PROCESSING_REQUEST)
+            Session(context).databaseRoot().child(Session(context).CURRENT_PROCESSING_REQUEST)
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -109,7 +108,7 @@ class AcceptedRequestAdapter(val context: Context, val dataList: MutableList<Req
                             }
                             remind.text = "Reminding in $selectedTime"
                             val ref =
-                                FirebaseDatabase.getInstance().reference.child(Session(context).CURRENT_PROCESSING_REQUEST)
+                                Session(context).databaseRoot().child(Session(context).CURRENT_PROCESSING_REQUEST)
 
                             ref.addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -144,7 +143,7 @@ class AcceptedRequestAdapter(val context: Context, val dataList: MutableList<Req
                     .setPositiveButton(
                         "Yes",
                         DialogInterface.OnClickListener { dialogInterface, _ ->
-                            FirebaseDatabase.getInstance().reference.child(Session(context).REQUESTS)
+                            Session(context).databaseRoot().child(Session(context).REQUESTS)
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         for (snap in snapshot.children) {
@@ -161,7 +160,7 @@ class AcceptedRequestAdapter(val context: Context, val dataList: MutableList<Req
                                     override fun onCancelled(error: DatabaseError) {
                                     }
                                 })
-                            FirebaseDatabase.getInstance().reference.child(Session(context).CURRENT_PROCESSING_REQUEST)
+                            Session(context).databaseRoot().child(Session(context).CURRENT_PROCESSING_REQUEST)
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         for (snap in snapshot.children) {

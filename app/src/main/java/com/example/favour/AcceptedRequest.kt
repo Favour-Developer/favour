@@ -7,7 +7,6 @@ import com.example.favour.notifications.Data
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_accepted_request.*
 
@@ -25,8 +24,9 @@ class AcceptedRequest : NavigationDrawer() {
             onBackPressed()
             finish()
         })
-
-        FirebaseDatabase.getInstance().reference.child(Session(this).CURRENT_PROCESSING_REQUEST)
+        val database = Session(this).databaseRoot()
+        database.keepSynced(true)
+        database.child(Session(this).CURRENT_PROCESSING_REQUEST)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                 }
@@ -41,7 +41,7 @@ class AcceptedRequest : NavigationDrawer() {
             })
 
 
-        FirebaseDatabase.getInstance().reference.child(Session(this).REQUESTS)
+        database.child(Session(this).REQUESTS)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                 }

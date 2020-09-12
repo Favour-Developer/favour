@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_item_list.*
 
@@ -44,7 +43,7 @@ class FragmentItemList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (photoOrText == 1) {
             requestList.visibility = View.GONE
-            val ref = FirebaseStorage.getInstance().reference.child("Requests")
+            val ref = Session(requireContext()).storageRoot().child("Requests")
                 .child(requestId)
             ref.downloadUrl.addOnSuccessListener { uri ->
                 Picasso.with(requireContext()).load(uri).into(requestImage)

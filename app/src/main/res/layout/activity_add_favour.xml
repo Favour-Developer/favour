@@ -277,7 +277,7 @@
                 android:visibility="gone" />
 
             <com.autofit.et.lib.AutoFitEditText
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:id="@+id/textItems"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

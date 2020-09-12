@@ -1,19 +1,30 @@
 package com.example.favour.notifications
 
+import java.sql.Timestamp
+
 class Data {
     private var user: String = ""
     private var icon = 0
     private var body: String = ""
     private var title: String = ""
     private var sented: String = ""
+    private var timestamp: String = ""
 
     constructor() {}
-    constructor(user: String, icon: Int, body: String, title: String, sented: String) {
+    constructor(
+        user: String,
+        icon: Int,
+        body: String,
+        title: String,
+        sented: String,
+        timestamp: String
+    ) {
         this.user = user
         this.icon = icon
         this.body = body
         this.title = title
         this.sented = sented
+        this.timestamp = timestamp
     }
 
 
@@ -56,6 +67,14 @@ class Data {
 
     fun setSented() {
         this.sented = sented
+    }
+
+    fun getTimestamp(): String? {
+        return timestamp
+    }
+
+    fun setTimestamp() {
+        this.timestamp = timestamp
     }
 
 

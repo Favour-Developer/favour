@@ -11,11 +11,8 @@ import com.example.favour.notifications.Data
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_notification.*
-import kotlinx.android.synthetic.main.fragment_request.*
-import kotlinx.android.synthetic.main.fragment_request.blank
 
 
 class FragmentNotification : Fragment() {
@@ -41,7 +38,7 @@ class FragmentNotification : Fragment() {
         BackButtonToHome.setOnClickListener(View.OnClickListener {
             requireActivity().onBackPressed()
         })
-        val database = FirebaseDatabase.getInstance().reference
+        val database = Session(requireContext()).databaseRoot()
         database.keepSynced(true)
         database.child("notifications")
             .child(FirebaseAuth.getInstance().uid.toString()).child("myNotifications")
@@ -52,15 +49,17 @@ class FragmentNotification : Fragment() {
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    data.clear()
-                    for (snap in snapshot.children) {
-                        val notice = snap.getValue(Data::class.java)
-                        data.add(0, notice!!)
+                    if (isAdded) {
+                        data.clear()
+                        for (snap in snapshot.children) {
+                            val notice = snap.getValue(Data::class.java)
+                            data.add(0, notice!!)
+                        }
+                        if (data.size == 0) noNotice.visibility = View.VISIBLE
+                        else noNotice.visibility = View.GONE
+                        adapter = NotificationAdapter(requireContext(), data)
+                        notification_rv.adapter = adapter
                     }
-                    if (data.size == 0) noNotice.visibility = View.VISIBLE
-                    else noNotice.visibility = View.GONE
-                    adapter = NotificationAdapter(requireContext(), data)
-                    notification_rv.adapter = adapter
                 }
 
             })
