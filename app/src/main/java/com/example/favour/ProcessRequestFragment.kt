@@ -94,16 +94,18 @@ class ProcessRequestFragment : Fragment() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (i in snapshot.children) {
+                if (isAdded) {
+                    for (i in snapshot.children) {
 
-                    requestProcessDTO = i.getValue(RequestProcessDTO::class.java)!!
-                    if (requestProcessDTO.requestID == requestID) break
-                }
-                when {
-                    requestProcessDTO.amount == 0 -> process1()
-                    requestProcessDTO.purchased -> process4(false)
+                        requestProcessDTO = i.getValue(RequestProcessDTO::class.java)!!
+                        if (requestProcessDTO.requestID == requestID) break
+                    }
+                    when {
+                        requestProcessDTO.amount == 0 -> process1()
+                        requestProcessDTO.purchased -> process4(false)
 //                    requestProcessDTO.amountApproved -> process3(false)
-                    else -> process2()
+                        else -> process2()
+                    }
                 }
             }
         })

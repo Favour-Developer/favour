@@ -32,7 +32,7 @@ class FragmentFavourCompleted : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(context, MainActivity::class.java))
+            startActivity(Intent(requireContext(), MainActivity::class.java))
             requireActivity().finish()
         }, 3000)
     }
